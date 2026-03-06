@@ -108,7 +108,7 @@ class ConversionWidget extends WP_Widget
             foreach ($similar_numbers_fr as $index => $n) {
                 // vary the anchor text
                 $anchor_phrase = sprintf($anchor_texts_fr[$index % count($anchor_texts_fr)], $n);
-                $url = esc_url(site_url('/ecrire/' . $n . '-en-lettre/'));
+                $url = esc_url(site_url('/how-do-you-spell-' . $n . '-in-words/'));
                 echo '<li><a href="' . $url . '">' . esc_html($anchor_phrase) . '</a></li>';
             }
             echo '</ul>';
@@ -153,7 +153,7 @@ class ConversionWidget extends WP_Widget
                     $anchor_phrase = sprintf($anchor_texts_en[$index % count($anchor_texts_en)], $n);
                 }
 
-                $url = esc_url(site_url('/comment-on-dit/' . $n . '-en-anglais/'));
+                $url = esc_url(site_url('/how-to-say-' . $n . '-in-french/'));
                 echo '<li><a href="' . $url . '">' . esc_html($anchor_phrase) . '</a></li>';
             }
             echo '</ul>';

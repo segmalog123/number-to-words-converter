@@ -30,8 +30,8 @@ class SitemapController
         global $wpseo_sitemaps;
 
         if (isset($wpseo_sitemaps) && !empty($wpseo_sitemaps)) {
-            $wpseo_sitemaps->register_sitemap('ecrirechiffre', [$this, 'createEcrireSitemap']);
-            $wpseo_sitemaps->register_sitemap('commentonditchiffre', [$this, 'createCommentOnDitSitemap']);
+            $wpseo_sitemaps->register_sitemap('spellinwords', [$this, 'createEcrireSitemap']);
+            $wpseo_sitemaps->register_sitemap('sayinfrench', [$this, 'createCommentOnDitSitemap']);
         }
     }
 
@@ -40,8 +40,8 @@ class SitemapController
      */
     public function registerSitemapActions()
     {
-        add_action('wp_seo_do_sitemap_our-ecrirechiffre', [$this, 'createEcrireSitemap']);
-        add_action('wp_seo_do_sitemap_our-commentonditchiffre', [$this, 'createCommentOnDitSitemap']);
+        add_action('wp_seo_do_sitemap_our-spellinwords', [$this, 'createEcrireSitemap']);
+        add_action('wp_seo_do_sitemap_our-sayinfrench', [$this, 'createCommentOnDitSitemap']);
     }
 
     /**
@@ -55,7 +55,7 @@ class SitemapController
 
         foreach ($vips as $i) {
             $url = [];
-            $url['loc'] = site_url() . '/ecrire/' . $i . '-en-lettre/';
+            $url['loc'] = site_url() . '/how-do-you-spell-' . $i . '-in-words/';
             $url['mod'] = date('c', time());
             $output .= $wpseo_sitemaps->renderer->sitemap_url($url);
         }
@@ -79,7 +79,7 @@ class SitemapController
 
         foreach ($vips as $i) {
             $url = [];
-            $url['loc'] = site_url() . '/comment-on-dit/' . $i . '-en-anglais/';
+            $url['loc'] = site_url() . '/how-to-say-' . $i . '-in-french/';
             $url['mod'] = date('c', time());
             $output .= $wpseo_sitemaps->renderer->sitemap_url($url);
         }
@@ -101,7 +101,7 @@ class SitemapController
     public function addEcrireSitemapIndex($items)
     {
         $items .= '    <sitemap>   
-        <loc>' . site_url() . '/ecrirechiffre-sitemap.xml</loc>
+        <loc>' . site_url() . '/spellinwords-sitemap.xml</loc>
         <lastmod>' . date('c', time()) . '</lastmod>
     </sitemap>
 ';
@@ -117,7 +117,7 @@ class SitemapController
     public function addCommentOnDitSitemapIndex($items)
     {
         $items .= '    <sitemap>   
-        <loc>' . site_url() . '/commentonditchiffre-sitemap.xml</loc>
+        <loc>' . site_url() . '/sayinfrench-sitemap.xml</loc>
         <lastmod>' . date('c', time()) . '</lastmod>
     </sitemap>
 ';

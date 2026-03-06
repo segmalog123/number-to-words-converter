@@ -27,23 +27,23 @@ class AssetManager
         // jQuery Countdown
         wp_enqueue_script(
             'cel-countdown-js',
-            ntw_PLUGIN_URL . 'assets/js/jquery.countdown.min.js',
+            NTW_PLUGIN_URL . 'assets/js/jquery.countdown.min.js',
             ['jquery'],
-            ntw_PLUGIN_VERSION,
+            NTW_PLUGIN_VERSION,
             true
         );
 
         // Main converter script
         wp_register_script(
             'cel-custom-script',
-            ntw_PLUGIN_URL . 'assets/js/script.js?v=' . strval(microtime(true)),
+            NTW_PLUGIN_URL . 'assets/js/script.js?v=' . strval(microtime(true)),
             ['jquery'],
-            ntw_PLUGIN_VERSION,
+            NTW_PLUGIN_VERSION,
             true
         );
         // Detect language context for the search bar
-        $is_english_page = get_query_var('ntw_page') === 'convertisseur-anglais'
-            || strpos($_SERVER['REQUEST_URI'] ?? '', '/comment-on-dit/') !== false;
+        $is_french_page = get_query_var('ntw_page') === 'convertisseur-anglais'
+            || strpos($_SERVER['REQUEST_URI'] ?? '', '/how-to-say-') !== false;
 
         wp_localize_script(
             'cel-custom-script',
@@ -52,8 +52,8 @@ class AssetManager
                 'site_url' => site_url(),
                 'ajax_url' => admin_url('admin-ajax.php'),
                 'nonce' => wp_create_nonce('ntw_convert_nonce'),
-                'is_landing_page' => (is_front_page() || $is_english_page) ? '1' : '0',
-                'default_lang' => $is_english_page ? 'en' : 'fr',
+                'is_landing_page' => (is_front_page() || $is_french_page) ? '1' : '0',
+                'default_lang' => $is_french_page ? 'fr' : 'en',
             ]
         );
         wp_enqueue_script('cel-custom-script');
@@ -61,9 +61,9 @@ class AssetManager
         // Converter styles
         wp_enqueue_style(
             'cel-converter-css',
-            ntw_PLUGIN_URL . 'assets/css/converter.css',
+            NTW_PLUGIN_URL . 'assets/css/converter.css',
             [],
-            ntw_PLUGIN_VERSION
+            NTW_PLUGIN_VERSION
         );
 
         // Result page styles (on conversion result pages OR English landing page)
@@ -73,9 +73,9 @@ class AssetManager
         if ($should_load_css) {
             wp_enqueue_style(
                 'cel-result-page-css',
-                ntw_PLUGIN_URL . 'assets/css/result-page.css',
+                NTW_PLUGIN_URL . 'assets/css/result-page.css',
                 [],
-                ntw_PLUGIN_VERSION
+                NTW_PLUGIN_VERSION
             );
         }
     }

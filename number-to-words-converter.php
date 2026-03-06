@@ -24,8 +24,8 @@ if (!defined('ABSPATH')) {
 // This MUST be defined before plugins_loaded / output buffering starts.
 $ntw_request_uri = $_SERVER['REQUEST_URI'] ?? '';
 if (
-    strpos($ntw_request_uri, '/ecrire/') !== false ||
-    strpos($ntw_request_uri, '/comment-on-dit/') !== false
+    strpos($ntw_request_uri, '/how-do-you-spell-') !== false ||
+    strpos($ntw_request_uri, '/how-to-say-') !== false
 ) {
     if (!defined('DONOTCACHEPAGE')) {
         define('DONOTCACHEPAGE', true);
@@ -38,18 +38,18 @@ unset($ntw_request_uri);
 // ============================================================
 
 // Plugin constants
-define('ntw_PLUGIN_VERSION', '1.0.0');
-define('ntw_PLUGIN_FILE', __FILE__);
-define('ntw_PLUGIN_DIR', plugin_dir_path(__FILE__));
-define('ntw_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('ntw_PLUGIN_BASENAME', plugin_basename(__FILE__));
+define('NTW_PLUGIN_VERSION', '1.0.0');
+define('NTW_PLUGIN_FILE', __FILE__);
+define('NTW_PLUGIN_DIR', plugin_dir_path(__FILE__));
+define('NTW_PLUGIN_URL', plugin_dir_url(__FILE__));
+define('NTW_PLUGIN_BASENAME', plugin_basename(__FILE__));
 
 /**
  * PSR-4 style Autoloader for NumberToWordsConverter namespace.
  */
 spl_autoload_register(function ($class) {
     $prefix = 'NumberToWordsConverter\\';
-    $base_dir = ntw_PLUGIN_DIR . 'src/';
+    $base_dir = NTW_PLUGIN_DIR . 'src/';
     $len = strlen($prefix);
 
     if (strncmp($prefix, $class, $len) !== 0) {
@@ -65,7 +65,7 @@ spl_autoload_register(function ($class) {
 });
 
 // Load global function wrappers (non-namespaced for template compatibility).
-require_once ntw_PLUGIN_DIR . 'src/global-functions.php';
+require_once NTW_PLUGIN_DIR . 'src/global-functions.php';
 
 /**
  * Plugin activation.

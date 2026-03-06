@@ -65,8 +65,8 @@ class RewriteRules
      * Force trailing slash on conversion URLs via 301 redirect.
      * Fires on template_redirect so it works for virtual pages.
      *
-     * /ecrire/95-en-lettre   → 301 → /ecrire/95-en-lettre/
-     * /comment-on-dit/25-en-anglais → 301 → /comment-on-dit/25-en-anglais/
+     * /how-do-you-spell-95-in-words   → 301 → /how-do-you-spell-95-in-words/
+     * /how-to-say-25-in-french → 301 → /how-to-say-25-in-french/
      */
     public function forceTrailingSlash()
     {
@@ -77,7 +77,7 @@ class RewriteRules
             return;
         }
 
-        // Get the current request URI (e.g. /ecrire/95-en-lettre)
+        // Get the current request URI (e.g. /how-do-you-spell-95-in-words)
         $request_uri = $_SERVER['REQUEST_URI'];
         $path = parse_url($request_uri, PHP_URL_PATH);
 
