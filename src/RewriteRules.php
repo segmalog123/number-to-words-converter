@@ -26,9 +26,31 @@ class RewriteRules
 
     /**
      * Register the rewrite rules for both conversion endpoints.
-     * The /? at the end makes the trailing slash optional so both
-     * /ecrire/95-en-lettre and /ecrire/95-en-lettre/ are matched.
      */
+    public function register()
+    {
+        add_rewrite_rule(
+            '^how-do-you-spell-([0-9]+)-in-words/?$',
+            'index.php?number_id=$matches[1]',
+            'top'
+        );
+
+        add_rewrite_rule(
+            '^how-to-say-([0-9]+)-in-french/?$',
+            'index.php?number_id=$matches[1]',
+            'top'
+        );
+
+        // Add support for the non-dynamic English landing page.
+        add_rewrite_rule(
+            '^convertisseur-anglais/?$',
+            'index.php?ntw_page=convertisseur-anglais',
+            'top'
+        );
+    }
+
+    /**
+     * Register the query variables so WP can parse them from the URL.
      * @param array $vars Existing query vars.
      * @return array Modified query vars.
      */
