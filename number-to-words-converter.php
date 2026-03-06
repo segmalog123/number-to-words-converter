@@ -3,7 +3,7 @@
  * Plugin Name:       Number To Words Converter
  * Plugin URI:        https://www.NumberToWordsConverter.com
  * Description:       Converts numbers to words in English and French. Generates virtual pages for /how-do-you-spell-{n}-in-words/ and /how-to-say-{n}-in-french/ URLs.
- * Version:           0.0.1
+ * Version:           0.0.2
  * Author:            Chiffre en Lettre
  * Author URI:        https://www.NumberToWordsConverter.com
  * Text Domain:       number-to-words-converter

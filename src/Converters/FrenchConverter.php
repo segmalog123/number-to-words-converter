@@ -543,12 +543,16 @@ class FrenchConverter
             $nbr1 = self::enlettres($split_number_int[0]);
             $nbr2 = self::enlettres($split_number_int[1]);
 
-            if ($devise == 0) {
+            if ($devise == 0 || $devise === 'EUR') {
                 $final_number_lettre = $nbr1 . ' euros et ' . $nbr2 . ' centimes';
             } elseif ($devise == 1) {
                 $final_number_lettre = $nbr1 . ' dinars et ' . $nbr2 . ' millimes';
-            } elseif ($devise == 2) {
-                $final_number_lettre = $nbr1 . ' dollar canadien et ' . $nbr2 . ' cents';
+            } elseif ($devise == 2 || $devise === 'CAD') {
+                $final_number_lettre = $nbr1 . ' dollars canadiens et ' . $nbr2 . ' cents';
+            } elseif ($devise === 'USD') {
+                $final_number_lettre = $nbr1 . ' dollars américains et ' . $nbr2 . ' cents';
+            } elseif ($devise === 'GBP') {
+                $final_number_lettre = $nbr1 . ' livres sterling et ' . $nbr2 . ' pence';
             } elseif ($devise == 3) {
                 $final_number_lettre = $nbr1 . ' dinars et ' . $nbr2 . ' centimes';
             } elseif ($devise == 4) {
@@ -562,12 +566,16 @@ class FrenchConverter
                 'number_int' => $number_int,
             ];
         } else {
-            if ($devise == 0) {
+            if ($devise == 0 || $devise === 'EUR') {
                 $final_number_lettre = self::enlettres($nombre) . ' euros';
             } elseif ($devise == 1) {
                 $final_number_lettre = self::enlettres($nombre) . ' dinars';
-            } elseif ($devise == 2) {
-                $final_number_lettre = self::enlettres($nombre) . ' dollar canadien';
+            } elseif ($devise == 2 || $devise === 'CAD') {
+                $final_number_lettre = self::enlettres($nombre) . ' dollars canadiens';
+            } elseif ($devise === 'USD') {
+                $final_number_lettre = self::enlettres($nombre) . ' dollars américains';
+            } elseif ($devise === 'GBP') {
+                $final_number_lettre = self::enlettres($nombre) . ' livres sterling';
             } elseif ($devise == 3) {
                 $final_number_lettre = self::enlettres($nombre) . ' dinars';
             } elseif ($devise == 4) {

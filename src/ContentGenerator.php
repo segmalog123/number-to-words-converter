@@ -29,9 +29,9 @@ class ContentGenerator
             $num_fmt = number_format((float) str_replace(',', '.', $number), 2, '.', ',');
         } else {
             setlocale(LC_TIME, 'fr_FR.UTF-8', 'fra');
-            $date = date_i18n('j F Y');
+            $date = date('F j, Y'); // Changed to English date for English speakers viewing the French page
             $amount_txt = ucfirst($result);
-            $payee = 'Votre Nom Ici';
+            $payee = 'Your Name Here';
             $num_fmt = number_format((float) str_replace(',', '.', $number), 2, ',', ' ');
         }
 
@@ -45,10 +45,10 @@ class ContentGenerator
     }
 
     /**
-     * Get mathematical properties (explained in French) with high spintax variance.
+     * Get mathematical properties with high spintax variance in English.
      *
      * @param string $number
-     * @return array List of fact strings (French).
+     * @return array List of fact strings (English).
      */
     public static function getMathFacts($number)
     {
@@ -62,45 +62,45 @@ class ContentGenerator
         // Even/Odd
         if ($n % 2 === 0) {
             $facts[] = $pick([
-                "La parité de {$n} est paire, ce qui signifie qu'il est divisible par 2 exactement.",
-                "Mathématiquement parlant, {$n} est un entier naturel pair.",
-                "Puisqu'il se termine par " . ($n % 10) . ", {$n} fait partie des nombres pairs.",
-                "Le nombre entier {$n} est un multiple de 2 (nombre pair)."
+                "The parity of {$n} is even, which means it is exactly divisible by 2.",
+                "Mathematically speaking, {$n} is an even natural number.",
+                "Since it ends in " . ($n % 10) . ", {$n} is part of the even numbers.",
+                "The integer {$n} is a multiple of 2 (even number)."
             ]);
         } else {
             $facts[] = $pick([
-                "La parité de {$n} est impaire, il ne peut donc pas être divisé par 2 sans reste.",
-                "Le nombre {$n} appartient à la catégorie algébrique des entiers impairs.",
-                "Par ses propriétés arithmétiques basiques, {$n} est classifié comme un nombre impair.",
-                "Étant donné son dernier chiffre, il est évident que {$n} est absolument impair."
+                "The parity of {$n} is odd, so it cannot be divided by 2 without a remainder.",
+                "The number {$n} belongs to the algebraic category of odd integers.",
+                "By its basic arithmetic properties, {$n} is classified as an odd number.",
+                "Given its last digit, it is obvious that {$n} is absolutely odd."
             ]);
         }
 
         // Binary
         $bin = decbin($n);
         $facts[] = $pick([
-            "Si l'on traduit {$n} dans le système binaire (base 2), on obtient la séquence : {$bin}.",
-            "L'équivalent de {$n} en code binaire informatique classique s'écrit {$bin}.",
-            "En numération de base 2 (ou binaire), la valeur de {$n} est strictement égale à {$bin}.",
-            "Pour la logique machine, ce nombre {$n} est lu sous la forme binaire {$bin}."
+            "If we translate {$n} into the binary system (base 2), we get the sequence: {$bin}.",
+            "The equivalent of {$n} in classic computer binary code is {$bin}.",
+            "In base 2 numeration (or binary), the value of {$n} is strictly equal to {$bin}.",
+            "For machine logic, this number {$n} is read in the binary form {$bin}."
         ]);
 
         // Hex
         $hex = strtoupper(dechex($n));
         $facts[] = $pick([
-            "En notation hexadécimale (base 16), la valeur correspondante est {$hex}.",
-            "Dans le système hexadécimal fréquemment utilisé en programmation, {$n} se note {$hex}.",
-            "La conversion hexadécimale de l'entier décimal {$n} donne le résultat {$hex}.",
-            "Si on l'encode sur la base arithmétique 16, {$n} s'affiche ainsi : {$hex}."
+            "In hexadecimal notation (base 16), the corresponding value is {$hex}.",
+            "In the hexadecimal system frequently used in programming, {$n} is noted as {$hex}.",
+            "The hexadecimal conversion of the decimal integer {$n} gives the result {$hex}.",
+            "If encoded on arithmetic base 16, {$n} is displayed as: {$hex}."
         ]);
 
         // Squared
         $sqrt = sqrt($n);
         if ($sqrt == floor($sqrt)) {
             $facts[] = $pick([
-                "Fait notable : {$n} est reconnu comme étant le carré parfait du nombre entier {$sqrt}.",
-                "Ce nombre {$n} possède une racine carrée exacte valant {$sqrt}.",
-                "La géométrie nous indique que {$n} forme un carré parfait basé sur le côté {$sqrt}."
+                "Notable fact: {$n} is recognized as being the perfect square of the integer {$sqrt}.",
+                "This number {$n} has an exact square root of {$sqrt}.",
+                "Geometry tells us that {$n} forms a perfect square based on the side {$sqrt}."
             ]);
         }
 
@@ -108,11 +108,11 @@ class ContentGenerator
     }
 
     /**
-     * Get grammar rules for the target language, explained in French with variance.
+     * Get grammar rules for the target language, explained in English with variance.
      *
      * @param string $number
      * @param string $target_lang The language of the number being written ('fr' or 'en').
-     * @return array List of rules in French.
+     * @return array List of rules in English.
      */
     public static function getGrammarRules($number, $target_lang = 'fr')
     {
@@ -127,43 +127,43 @@ class ContentGenerator
             // ENGLISH Rules
             if ($n >= 21 && $n <= 99) {
                 $rules[] = $pick([
-                    "Syntaxe anglaise : les nombres allant de 21 à 99 requièrent un trait d'union pour {$n}.",
-                    "Pour {$n}, la grammaire veut que l'on lie la dizaine à l'unité avec un tiret.",
-                    "L'anglais moderne oblige l'usage du trait d'union sur tous les composés de ce type."
+                    "English syntax: numbers ranging from 21 to 99 require a hyphen for {$n}.",
+                    "For {$n}, grammar dictates linking the tens to the units with a hyphen.",
+                    "Modern English requires the use of a hyphen on all compound numbers of this type."
                 ]);
             }
             if ($n > 100 && $n % 100 !== 0) {
                 $rules[] = $pick([
-                    "Au Royaume-Uni, pour écrire des nombres comme {$n}, on ajoute la conjonction verbale 'and'.",
-                    "L'habitude britannique dicte l'emploi du pont 'and' avant les dizaines d'un nombre tel que {$n}.",
-                    "C'est une spécificité locale : les Anglais insèrent un 'and' dans la structure de {$n}."
+                    "In the United Kingdom, to write numbers like {$n}, the conjunction 'and' is commonly added.",
+                    "British custom dictates the use of the connective 'and' before the tens of a number such as {$n}.",
+                    "It's a regional specificity: the British insert 'and' into the spelling structure of {$n}."
                 ]);
             }
             if ($n >= 1000) {
                 $rules[] = $pick([
-                    "Cas d'invariabilité : les substantifs anglais comme 'thousand' ou 'million' ne prennent jamais la marque du pluriel ici.",
-                    "On remarquera que, même en multipliant les milliers dans {$n}, le mot 'thousand' reste singulier en anglais.",
-                    "Les volumes importants comme {$n} n'entrainent aucune altération orthographique plurielle sur les multiplicateurs de base en anglais."
+                    "Case of invariability: English nouns like 'thousand' or 'million' never take a plural marker here.",
+                    "Note that even when multiplying thousands in {$n}, the word 'thousand' remains singular in English.",
+                    "Large volumes like {$n} do not entail any plural spelling alterations on base multipliers in English."
                 ]);
             }
         } else {
             // FRENCH Rules
             if ($n < 100 && $n > 0) {
                 $rules[] = $pick([
-                    "Par principe, tous les éléments du nombre {$n} inférieur à cent utilisent des traits de liaison typographiques.",
-                    "La grammaire de base exige qu'une valeur comme {$n} soit écrite avec un ou plusieurs traits d'union.",
+                    "As a general principle, all elements of the number {$n} below one hundred use typographic hyphens.",
+                    "Basic French grammar requires that a value like {$n} be written with one or more hyphens."
                 ]);
             }
             if ($n % 100 === 0 && $n >= 200 && $n < 1000) {
                 $rules[] = $pick([
-                    "Le marqueur de pluriel s'applique sur le mot cent, car il clôt la lecture de {$n}.",
-                    "Ce nombre précis ({$n}) force le terme « cent » à obtenir un 's' final en l'absence de chiffres à sa suite."
+                    "The plural marker applies to the word 'cent', because it ends the reading of {$n}.",
+                    "This exact number ({$n}) forces the term 'cent' to obtain a final 's' in the absence of following digits."
                 ]);
             }
             if ($n >= 1000 && $n < 2000) {
                 $rules[] = $pick([
-                    "L'adjectif numéral 'mille' est strictement invariant en genre comme en nombre.",
-                    "Comme ce nombre implique la valeur des milliers, rappelez-vous que le mot « mille » s'écrit toujours sans 's'."
+                    "The numeral adjective 'mille' is strictly invariable in both gender and number.",
+                    "Since this number involves the value of thousands, remember that the word 'mille' is always written without an 's'."
                 ]);
             }
         }
@@ -185,24 +185,24 @@ class ContentGenerator
         // Age Context (18-100)
         if ($n >= 18 && $n <= 100) {
             $birth_year = $current_year - $n;
-            return "Si vous avez {$n} ans, vous êtes né(e) en {$birth_year}.";
+            return "If you are {$n} years old, you were born in {$birth_year}.";
         }
 
         // Monthly Salary Context (1200 - 10000)
         if ($n >= 1200 && $n <= 120000) {
-            $monthly = number_format($n / 12, 2, ',', ' ');
-            return "Un salaire annuel de {$n} € correspond à environ {$monthly} € par mois.";
+            $monthly = number_format($n / 12, 2, '.', ',');
+            return "An annual salary of {$n} dollars corresponds to about {$monthly} dollars per month.";
         }
 
         // Distance Context (1 - 50)
         if ($n >= 1 && $n <= 50) {
-            $steps = number_format($n * 1300, 0, ',', ' '); // Approx steps per km
-            return "Parcourir {$n} km à pied représente environ {$steps} pas.";
+            $steps = number_format($n * 1300, 0, '.', ','); // Approx steps per km
+            return "Walking {$n} km represents about {$steps} steps.";
         }
 
         // Year Context (1900 - 2026)
         if ($n >= 1900 && $n <= $current_year) {
-            return "L'année {$n} est une année du calendrier grégorien.";
+            return "The year {$n} is a year of the Gregorian calendar.";
         }
 
         return null;
@@ -226,57 +226,66 @@ class ContentGenerator
         };
 
         if ($lang === 'fr') {
-            // Zéro
+            // FRENCH VARIATIONS
             if ($n === 0) {
                 $texts[] = $pick([
-                    "Fait grammatical symbolique : le nombre « zéro » est le seul nom valant quantité qui s'accorde au pluriel si employé comme substantif commun (des zéros).",
-                    "Spécificité conceptuelle absolue : contrairement aux numéraux ordinaires, {$n} accepte paradoxalement une pluralisation francophone lorsqu'il qualifie de vagues éléments nuls.",
-                    "La linguistique se détache ici des mathématiques concernant {$n} : pris isolément en tant qu'état marquant l'absence déclinable, il justifie d'acquérir occasionnellement un 's'."
+                    "Symbolic grammatical fact: the number 'zéro' is the only quantity noun that agrees in plural when used as a common noun (des zéros).",
+                    "Absolute conceptual specificity: unlike ordinary numerals, {$n} paradoxically accepts pluralization when it qualifies vague null elements.",
+                    "Linguistics separates itself here from mathematics concerning {$n}: taken in isolation as a state marking a declinable absence, it justifies occasionally acquiring an 's'."
+                ]);
+            }
+
+            // Round tens (10, 20, 30, 40, 50, 60, 70) — single undivided word in French
+            if ($n >= 10 && $n <= 70 && $n % 10 === 0) {
+                $texts[] = $pick([
+                    "In French, round multiples of ten like {$n} are expressed as a single word (e.g., cinquante, soixante). No hyphens are needed as the number is formed by one base word.",
+                    "Unlike compound numbers, round tens like {$n} are written as a single undivided word in French. This makes them simpler to spell than composite numbers.",
+                    "The French number {$n} is a round ten and is therefore written as a single word, contrasting with composite numbers that require hyphens per the 1990 reform."
                 ]);
             }
 
             // Hyphens (1990 Reform)
             if ($n > 10 && $n < 100 && $n % 10 !== 0 && $n !== 11 && $n !== 71 && $n !== 81 && $n !== 91) {
                 $texts[] = $pick([
-                    "L'orthographe française classique séparait les mots par des espaces. Mais depuis la réforme de 1990, l'Académie recommande de relier les parties du nombre {$n} avec des traits d'union (ex : vingt-et-un).",
-                    "Afin d'éviter tout questionnement, la règle orthographique modernisée depuis l'année 1990 oblige à relier toutes les syllabes numériques d'un nombre composé équivalent à {$n} avec des traits horizontaux.",
-                    "Il est important de souligner que, suite aux ajustements de 1990, l'ensemble des éléments constituant la transcription lettrée de {$n} s'accrochent désormais obligatoirement avec un trait d'union coordonnant."
+                    "Classical French spelling separated words with spaces. But since the 1990 reform, the Academy recommends linking the parts of the number {$n} with hyphens (e.g., vingt-et-un).",
+                    "To avoid any questioning, the spelling rule modernized since 1990 obliges to link all the numerical syllables of a compound number equivalent to {$n} with horizontal hyphens.",
+                    "It is important to emphasize that, following the 1990 adjustments, all elements constituting the written transcription of {$n} are now compulsorily attached with a coordinating hyphen."
                 ]);
             } elseif ($n > 100) {
                 $texts[] = $pick([
-                    "Bon à retenir pour {$n} : les nouvelles réglementations de 1990 autorisent expressément à apposer un trait d'union entre chaque terme, y compris les centaines.",
-                    "L'usage des traits d'union s'est élargi. L'orthographe rectifiée implique que toutes les composantes d'un grand entier comme {$n} peuvent désormais être reliées officiellement par des tirets.",
-                    "Pour clarifier la lecture de {$n}, le Conseil Supérieur de la Langue Française a standardisé l'apposition des traits d'union sur tous les blocs de mots décimaux."
+                    "Good to remember for {$n}: the new regulations of 1990 expressly authorize affixing a hyphen between each term, including the hundreds.",
+                    "The use of hyphens has broadened. The rectified spelling implies that all components of a large integer like {$n} can now be officially linked by dashes.",
+                    "To clarify the reading of {$n}, the Higher Council of the French Language standardized the affixing of hyphens on all blocks of decimal words."
                 ]);
             }
 
             // Exceptions for 80, 20
             if ($n === 80 || ($n > 80 && $n < 100)) {
                 $texts[] = $pick([
-                    "Le terme « vingt » présente une rare subtilité : il subit le pluriel dans 'quatre-vingts' mais le reperd immédiatement s'il est suivi d'un adjectif (ex: quatre-vingt-deux), comme c'est le cas pour la tranche {$n}.",
-                    "Exception grammaticale typiquement française que l'on retrouve avec {$n} : on accorde « vingt » en ajoutant un 's' terminal uniquement s'il est en queue de chaîne (ex = 80), mais jamais ailleurs.",
-                    "Le calcul lexical du « vingt » dans la foulée de {$n} obéit à une contrainte forte : il ne peut s'accorder pluriellement que s'il clôture l'expression numérale."
+                    "The term 'vingt' presents a rare subtlety: it takes the plural in 'quatre-vingts' but immediately loses it if followed by an adjective (e.g., quatre-vingt-deux), as is the case for the slice {$n}.",
+                    "A typical French grammatical exception found with {$n}: we agree 'vingt' by adding a terminal 's' only if it is at the end of the chain (e.g., 80), but never elsewhere.",
+                    "The lexical calculation of 'vingt' in the wake of {$n} obeys a strong constraint: it can only agree in the plural if it closes the numeral expression."
                 ]);
             }
 
             // Exceptions for 100
             if ($n === 100) {
                 $texts[] = $pick([
-                    "Règle invariable : le mot « cent » ne prend la marque du pluriel (un « s ») que s'il est multiplié par un autre entier, et qu'il termine la composante numérique du nombre.",
-                    "Concernant le pivot centésimal {$n}, le mot « cent » reste singulier dans ce cas précis.",
-                    "L'Académie française dicte que le terme « cent » ne s'accorde au pluriel que sous l'effet d'une multiplication, ce qui n'est pas le cas ici."
+                    "Invariable rule: the word 'cent' only takes the plural mark (an 's') if it is multiplied by another integer, and it ends the numerical component of the number.",
+                    "Regarding the centesimal pivot {$n}, the word 'cent' remains singular in this specific case.",
+                    "The French Academy dictates that the term 'cent' only agrees in the plural under the effect of a multiplication, which is not the case here."
                 ]);
             } elseif ($n % 100 === 0 && $n > 100 && $n < 1000) {
                 $texts[] = $pick([
-                    "Le saviez-vous ? Le mot « cent » prend exceptionnellement un « s » au pluriel dans ce nombre car il est multiplié par la centaine et termine l'expression.",
-                    "Dans un volume rond comme {$n}, le multiplicateur frontal oblige le mot « cent » à endosser la marque grammaticale du pluriel.",
-                    "C'est la règle d'or pour la valeur {$n} : puisqu'aucun chiffre additionnel ne suit la centaine multipliée, l'accord pluriel en 's' s'impose."
+                    "Did you know? The word 'cent' exceptionally takes an 's' in the plural in this number because it is multiplied by the hundred and ends the expression.",
+                    "In a round volume like {$n}, the front multiplier forces the word 'cent' to don the grammatical mark of the plural.",
+                    "This is the golden rule for the value {$n}: since no additional digit follows the multiplied hundred, the plural agreement in 's' is necessary."
                 ]);
             } elseif ($n > 100 && $n % 100 !== 0 && $n < 1000) {
                 $texts[] = $pick([
-                    "Dans cette configuration bien précise face à {$n}, le mot « cent » reste strictement au singulier (sans « s ») car il est suivi par une autre précision décimale ou unitaire.",
-                    "Exception de centaine appliquée à {$n} : bien qu'étant logiquement multiplié, le pivot « cent » annule son pluriel dès qu'il est contraint par un chiffre suiveur.",
-                    "On relève ici un mécanisme linguistique essentiel pour écrire {$n} : la queue du nombre bloque inéluctablement l'accord du marqueur 'cent'."
+                    "In this very specific configuration regarding {$n}, the word 'cent' remains strictly singular (without 's') because it is followed by another decimal or unitary precision.",
+                    "Hundred exception applied to {$n}: although logically multiplied, the pivot 'cent' cancels its plural as soon as it is constrained by a following digit.",
+                    "Here we note an essential linguistic mechanism for writing {$n}: the tail of the number inevitably blocks the agreement of the marker 'cent'."
                 ]);
             }
 
@@ -284,22 +293,22 @@ class ContentGenerator
             if ($n >= 1000 && $n < 1000000) {
                 if ($n >= 1000 && $n < 2000) {
                     $texts[] = $pick([
-                        "Règle d'or de la langue française : le mot « mille » est totalement invariable. Quelle que soit la quantité qu'il exprime, il ne prendra jamais de « s » (ni de trait d'union s'il suit un multiplicateur).",
-                        "L'orthographe de {$n} illustre le dogme de l'invariabilité des milliers : le mot « mille » s'écrit toujours au singulier.",
-                        "En écrivant {$n}, notez bien que « mille » échappe à la règle du pluriel. C'est une exception historique française.",
-                        "Le cap des milliers dans {$n} est marqué par le terme « mille », qui refuse obstinément la marque du pluriel.",
-                        "Aucun ajout de lettre finale n'est permis sur le mot « mille » lors de la retranscription textuelle de {$n}.",
-                        "La syntaxe francophone est stricte pour {$n} : le vocable désignant les milliers demeure gelé dans sa forme singulière."
+                        "Golden rule of the French language: the word 'mille' is totally invariable. Whatever quantity it expresses, it will never take an 's' (nor a hyphen if it follows a multiplier).",
+                        "The spelling of {$n} illustrates the dogma of the invariability of thousands: the word 'mille' is always written in the singular.",
+                        "When writing {$n}, note well that 'mille' escapes the plural rule. It is a historical French exception.",
+                        "The thousands milestone in {$n} is marked by the term 'mille', which stubbornly refuses the plural mark.",
+                        "No addition of a final letter is allowed on the word 'mille' during the textual transcription of {$n}.",
+                        "Francophone syntax is strict for {$n}: the word designating the thousands remains frozen in its singular form."
                     ]);
                 } else {
                     $multi_mille = floor($n / 1000);
                     $texts[] = $pick([
-                        "Même si {$n} symbolise formellement {$multi_mille} milliers, le terme « mille » ne prendra jamais de « s ». C'est une invariabilité absolue.",
-                        "Contrairement à la logique mathématique de multiplication ({$multi_mille} fois mille), le mot reste singulier dans l'écriture de {$n}.",
-                        "Dans le cas spécifique de {$n}, la multiplicité n'affecte pas l'orthographe du grand volume : « mille » demeure sans marque de pluriel.",
-                        "L'académie française impose pour un montant comme {$n} que le marqueur des milliers reste singulier, malgré le multiplicateur {$multi_mille}.",
-                        "Ne tombez pas dans le piège pour {$n} : on ne pluralise jamais les milliers en lettres, peu importe leur quantité initiale.",
-                        "La quantité exacte de {$multi_mille} milliers n'y change rien ; l'expression littérale de {$n} fige le mot central au singulier strict."
+                        "Even if {$n} formally symbolizes {$multi_mille} thousands, the term 'mille' will never take an 's'. It represents absolute invariability.",
+                        "Contrary to the mathematical logic of multiplication ({$multi_mille} times a thousand), the word remains singular in the writing of {$n}.",
+                        "In the specific case of {$n}, the multiplicity does not affect the spelling of the large volume: 'mille' remains without a plural mark.",
+                        "The French academy imposes for an amount like {$n} that the thousands marker remains singular, despite the multiplier {$multi_mille}.",
+                        "Do not fall into the trap for {$n}: we never pluralize thousands in letters, regardless of their initial quantity.",
+                        "The exact quantity of {$multi_mille} thousands changes nothing; the literal expression of {$n} freezes the central word in strict singular."
                     ]);
                 }
             }
@@ -307,9 +316,9 @@ class ContentGenerator
             // Millions / Milliards
             if ($n >= 1000000) {
                 $texts[] = $pick([
-                    "Contrairement au mot « mille », les termes « million » et « milliard » ont le statut grammatical de noms communs. Par conséquent, ils s'accordent en nombre et prennent naturellement un « s » au pluriel dès qu'il y en a au moins deux.",
-                    "Fait linguistique sur {$n} : les mots dénotant les millions ou milliards sont des substantifs. Ils reçoivent donc explicitement un 's' terminal au pluriel.",
-                    "La grammaire de {$n} impose un « s » sur le cap des millions ou milliards, se distinguant fondamentalement de l'invariabilité de « mille »."
+                    "Unlike the word 'mille', the terms 'million' and 'milliard' have the grammatical status of common nouns. Consequently, they agree in number and naturally take an 's' in the plural as soon as there are at least two.",
+                    "Linguistic fact about {$n}: the words denoting millions or billions are nouns. They therefore explicitly receive a terminal 's' in the plural.",
+                    "The grammar of {$n} imposes an 's' on the millions or billions cap, fundamentally distinguishing itself from the invariability of 'mille'."
                 ]);
             }
 
@@ -317,36 +326,36 @@ class ContentGenerator
             $last_digit = $n % 10;
             if ($last_digit === 1 && $n !== 11 && $n !== 71 && $n !== 81 && $n !== 91 && $n > 20) {
                 $texts[] = $pick([
-                    "Contrairement aux autres terminaisons, le suffixe « 1 » s'imbrique souvent au moyen du connecteur « et » dans ces ordres de grandeur, à la manière logique du terme {$n}.",
-                    "Le traitement grammatical du chiffre un (vis-à-vis de {$n}) force habituellement l'intervention de la charnière 'et' en substitution au trait de coupure franc.",
-                    "S'il arrive que {$n} doive s'accorder devant une notion de genre féminine (comme une 'page' ou une 'fois'), ce suffixe unique « un » pivotera phonétiquement vers « une ».",
-                    "La conjonction de coordination 'et' sert de pont grammatical exclusif pour accrocher l'unité finale 1 dans la structure de {$n}.",
-                    "C'est une tradition phonétique : on adoucit la prononciation de {$n} en insérant 'et' avant l'unité une, plutôt qu'un trait sec."
+                    "Unlike other endings, the suffix '1' is often nested using the connector 'et' in these orders of magnitude, in the logical manner of the term {$n}.",
+                    "The grammatical treatment of the digit one (vis-à-vis {$n}) usually forces the intervention of the hinge 'et' as a substitute for the clean hyphen.",
+                    "If {$n} has to agree before a feminine gender concept (like a 'page' or a 'time'), this unique suffix 'un' will phonetically pivot to 'une'.",
+                    "The coordinating conjunction 'et' serves as an exclusive grammatical bridge to hook the final unit 1 into the structure of {$n}.",
+                    "It is a phonetic tradition: we soften the pronunciation of {$n} by inserting 'et' before the unit one, rather than a sharp trait."
                 ]);
             }
             if ($n === 11 || $n % 100 === 71 || $n % 100 === 91) {
                 $texts[] = $pick([
-                    "Pour construire ce type de nombre comme 71 ou 91 en France, on ne dit pas « soixante-dix-et-un » mais on utilise le composé « onze » (ex: soixante-et-onze) afin de respecter le compte sur une base séagésimale (base 60).",
-                    "Afin de désigner {$n}, on s'affranchit du 'un' classique pour convoquer le bloc archaïque 'onze' selon le vieux système vicésimal.",
-                    "La lecture de l'unité terminale dans {$n} recourt structurellement au groupe « onze », marquant une asymétrie avec le reste des déclinaisons décimales."
+                    "To build this type of number like 71 or 91 in France, we do not say 'soixante-dix-et-un' but we use the compound 'onze' (e.g., soixante-et-onze) to respect counting on a sexagesimal base (base 60).",
+                    "To designate {$n}, we free ourselves from the classic 'un' to summon the archaic block 'onze' according to the old vigesimal system.",
+                    "Reading the terminal unit in {$n} structurally resorts to the group 'onze', marking an asymmetry with the rest of the decimal declensions."
                 ]);
             }
             if ($n % 100 === 81) {
-                $texts[] = "Exception française : on écrit « quatre-vingt-un » en omettant délibérément la conjonction « et », contrairement aux autres cas similaires comme « vingt-et-un ».";
+                $texts[] = "French exception: we write 'quatre-vingt-un' deliberately omitting the conjunction 'et', unlike other similar cases like 'vingt-et-un'.";
             }
 
             // Regional variants (Septante, Nonante, Huitante)
             if (($n >= 70 && $n < 80) || ($n >= 90 && $n < 100)) {
                 $texts[] = $pick([
-                    "Particularité helvète ou belge pour traduire la dizaine de {$n} : les zones géographiques ayant adopté l'usage de 'septante' ou 'nonante' contournent adroitement la méthode de calcul complexe en base-20 des Français.",
-                    "Détail culturel captivant impliqué par {$n} : la Suisse et la Belgique francophone simplifient radicalement ce nombre via l'utilisation vernaculaire de mots clairs et logiques comme septante ou nonante.",
-                    "En s'affranchissant du système vigésimal datant partiellement de l'époque gallo-romaine, certains territoires s'en remettent à un format lexique novateur pour aborder les grandeurs autour de {$n}."
+                    "A Swiss or Belgian peculiarity to translate the tens of {$n}: the geographical areas having adopted the use of 'septante' or 'nonante' adroitly bypass the complex base-20 calculation method of the French.",
+                    "A captivating cultural detail implied by {$n}: Switzerland and Francophone Belgium radically simplify this number via the vernacular use of clear and logical words like septante or nonante.",
+                    "By freeing themselves from the vigesimal system dating partially from the Gallo-Roman era, certain territories rely on an innovative lexicon format to approach the magnitudes around {$n}."
                 ]);
             }
             if ($n >= 80 && $n < 90) {
                 $texts[] = $pick([
-                    "Particularité régionale : en Suisse romande, il est fréquent d'entendre « huitante » à la place de « quatre-vingts », simplifiant grandement la lecture du nombre {$n}.",
-                    "Coutume linguistique locale : les Helvètes suppriment souvent la mathématique « quatre fois vingt » intégrée dans {$n} pour lui substituer la racine logique 'huitante'."
+                    "Regional peculiarity: in French-speaking Switzerland, it is common to hear 'huitante' instead of 'quatre-vingts', greatly simplifying the reading of the number {$n}.",
+                    "Local linguistic custom: the Swiss often remove the mathematics 'four times twenty' integrated in {$n} to substitute it with the logical root 'huitante'."
                 ]);
             }
 
@@ -356,106 +365,105 @@ class ContentGenerator
             // Zero
             if ($n === 0) {
                 $texts[] = $pick([
-                    "Vocabulaire : en anglais américain, on utilise presque exclusivement le mot « zero », tandis qu'en anglais britannique, on entend fréquemment « nought ».",
-                    "Particularité d'usage de {$n} : les Britanniques le nomment souvent 'nought' mathématiquement, ou même 'nil' dans un score sportif, contre 'zero' aux Etats-Unis.",
-                    "L'approche nominale de {$n} divise l'Atlantique, avec 'zero' pour cible en Amérique du nord et 'nought' dominant dans le Commonwealth."
+                    "Vocabulary: in American English, the word 'zero' is used almost exclusively, while in British English, 'nought' is frequently heard.",
+                    "Usage peculiarity of {$n}: the British often call it 'nought' mathematically, or even 'nil' in a sports score, compared to 'zero' in the United States.",
+                    "The nominal approach to {$n} divides the Atlantic, with 'zero' as the target in North America and 'nought' dominating in the Commonwealth."
                 ]);
             }
 
             // Teens (13-19)
             if ($n >= 13 && $n <= 19) {
                 $texts[] = $pick([
-                    "Origine des mots : les nombres de 13 à 19 se terminent invariablement par le suffixe « -teen », correspondant étymologiquement à l'ajout de 10 (« ten »).",
-                    "Spécificité de la tranche 13-19 étudiée ici avec {$n} : son marqueur nominal se termine obligatoirement par '-teen', indiquant l'addition de l'unité avec dix.",
-                    "La phonétique anglophone de {$n} trahit sa construction : le morceau final '-teen' n'est autre qu'une déclinaison historique signifiant l'addition à base 10.",
-                    "L'anglais encadre l'adolescence numérique ({$n}) par le récurrent suffixe '-teen'. C'est une règle pivot de la numération germanique originelle.",
-                    "Face à un numéro comme {$n}, observez l'emploi indéfectible de la terminaison '-teen', qui lie sémantiquement la racine du chiffre simple à la dizaine."
+                    "Origin of words: numbers from 13 to 19 invariably end with the suffix '-teen', etymologically corresponding to the addition of 10 ('ten').",
+                    "Specificity of the 13-19 bracket studied here with {$n}: its nominal marker necessarily ends with '-teen', indicating the addition of the unit with ten.",
+                    "The English phonetics of {$n} betrays its construction: the final piece '-teen' is nothing other than a historical declension meaning base 10 addition.",
+                    "English frames the numerical adolescence ({$n}) with the recurring suffix '-teen'. It is a pivotal rule of original Germanic numeration.",
+                    "Faced with a number like {$n}, observe the unwavering use of the ending '-teen', which semantically links the root of the simple digit to the ten."
                 ]);
             }
 
             // Tens (20-90)
             if ($n >= 20 && $n < 100 && $n % 10 === 0) {
                 $texts[] = $pick([
-                    "Règle de base : les dizaines rondes anglophones se forment systématiquement avec l'ajout du suffixe final « -ty » (ici pour symboliser {$n}).",
-                    "Contrairement aux 'teens', la terminaison '-ty' employée dans {$n} a pour vocation stricte de désigner un ensemble parfait de dizaines.",
-                    "Attention à la prononciation anglaise de {$n} : l'accent tonique glisse généralement sur la première syllabe pour bien différencier ce '-ty' des jeunes '-teen'.",
-                    "Point de grammaire fondamental sur {$n} : les multiples exclusifs de la dizaine entre 20 et 90 réclament le suffixe invariable '-ty'.",
-                    "Pour retranscrire la pleine dizaine {$n}, la langue anglaise fusionne le terme racine ou son dérivé à l'incontournable particule nominale '-ty'.",
-                    "En rédigeant {$n}, notez bien la clarté du suffixe : ce '-ty' indique sans ambiguïté la fermeture stricte d'un bloc de dix, sans reste unitaire."
+                    "Basic rule: round English tens are systematically formed with the addition of the final suffix '-ty' (here to symbolize {$n}).",
+                    "Unlike the 'teens', the ending '-ty' used in {$n} is strictly intended to designate a perfect set of tens.",
+                    "Pay attention to the English pronunciation of {$n}: the stress generally glides on the first syllable to differentiate this '-ty' from the young '-teens'.",
+                    "Fundamental grammar point on {$n}: exclusive multiples of the ten between 20 and 90 require the invariable suffix '-ty'.",
+                    "To transcribe the full ten {$n}, the English language merges the root term or its derivative with the essential nominal particle '-ty'.",
+                    "When writing {$n}, note well the clarity of the suffix: this '-ty' unambiguously indicates the strict closure of a block of ten, without unitary remainder."
                 ]);
             }
 
             // Hyphens 21-99
             if ($n >= 21 && $n <= 99 && $n % 10 !== 0) {
                 $texts[] = $pick([
-                    "Syntaxe anglaise : les nombres allant de 21 à 99 requièrent un trait d'union pour relier adéquatement {$n}.",
-                    "Pour écrire {$n}, la grammaire veut que l'on lie la dizaine à l'unité terminale avec un tiret.",
-                    "L'anglais moderne oblige l'usage typographique restrictif du trait d'union sur tous les composés de ce calibre comme {$n}.",
-                    "Attention à ce détail de ponctuation pour {$n} : vous devez obligatoirement intercaler un 'hyphen' (trait d'union) entre la lourde dizaine et la frêle unité.",
-                    "Règle d'or de 21 à 99 : face au complexe {$n}, les académies requièrent de souder l'expression numérale avec un court tiret connectif.",
-                    "Ne séparez jamais la dizaine et l'unité par un simple espace pour un montant comme {$n} ; la conjonction horizontale via trait d'union s'impose formellement.",
-                    "Typographie cardinale anglo-saxonne : {$n} obéit à la loi de la jonction par tiret reliant distinctement la racine de la décade au chiffre accompagnateur."
+                    "English syntax: numbers from 21 to 99 require a hyphen to adequately connect {$n}.",
+                    "To write {$n}, grammar requires linking the ten to the terminal unit with a hyphen.",
+                    "Modern English dictates the restrictive typographic use of the hyphen on all compounds of this caliber like {$n}.",
+                    "Pay attention to this detail of punctuation for {$n}: you must imperatively insert a hyphen between the heavy ten and the frail unit.",
+                    "Golden rule from 21 to 99: faced with the complex {$n}, academies require welding the numeral expression with a short connective dash.",
+                    "Never separate the ten and the unit with a simple space for an amount like {$n}; horizontal conjunction via a hyphen is formally imposed.",
+                    "Anglo-Saxon cardinal typography: {$n} obeys the law of junction by hyphen distinctly linking the root of the decade to the accompanying digit."
                 ]);
             }
 
             // Usage of "And"
             if ($n > 100 && $n % 100 !== 0) {
                 $texts[] = $pick([
-                    "Différence majeure transatlantique identifiée sur {$n} : la grammaire anglaise du Royaume-Uni impose structurellement d'insérer un mot de liaison abstrait « and » entre le groupe de têtes des centaines et la paire finale, pratique largement éludée aux États-Unis.",
-                    "Focus sur la ponctuation verbale de {$n} : pour les locuteurs britanniques ou australiens, formuler ce montant à voix haute exhortera fatalement l'incrustation conjonctive d'un 'and' juste avant la lecture des paires terminant le propos numérique.",
-                    "Les subtilités régionales au plan mondial, spécifiquement face à une chaîne comme {$n}, traduisent qu'un pont orthographique 'and' va apparaître en terre anglo-saxonne européenne alors qu'il sera rayé arbitrairement par le locuteur nord-américain moderne.",
-                    "En analysant la construction de {$n} en langue de Shakespeare, notez que l'anglais britannique exige l'ajout méticuleux du connecteur « and » après les volumes de centaines.",
-                    "Le formalisme des écoles londoniennes préconise fermement d'intercaler un « and » logique avant la fraction finale du nombre {$n}, spécificité gommée outre-Atlantique."
+                    "Major transatlantic difference identified on {$n}: United Kingdom English grammar structurally imposes inserting an abstract linking word 'and' between the group of hundreds and the final pair, a practice largely eluded in the United States.",
+                    "Focus on the verbal punctuation of {$n}: for British or Australian speakers, voicing this amount aloud will naturally urge the conjunctive inlay of an 'and' just before reading the pairs ending the numerical subject.",
+                    "Regional subtleties globally, specifically regarding a string like {$n}, reflect that an orthographic bridge 'and' will appear in European Anglo-Saxon territory while it will be arbitrarily struck by the modern North American speaker.",
+                    "By analyzing the construction of {$n} in Shakespeare's language, note that British English meticulously requires the addition of the connector 'and' after the volumes of hundreds.",
+                    "The formalism of London schools firmly recommends inserting a logical 'and' before the final fraction of the number {$n}, a specificity erased across the Atlantic."
                 ]);
             }
 
             // Invariable Thousand/Million
             if ($n >= 1000) {
                 $texts[] = $pick([
-                    "Règle inébranlable d'invariabilité anglo-saxonne : dans le scénario de {$n}, tout comme le mot 'mille' chez nous, les indicateurs « hundred », « thousand » ainsi que les échelons majeurs « million » préservent farouchement le singulier dès qu’ils portent un sens défini.",
-                    "Le saviez-vous ? En écrivant en format anglophone le résultat associé à {$n}, n'essayez sous aucun prétexte de forcer le pluriel avec un « s » sur des jalons lexicaux de grandeur numérique (ex: 'thousand'). Ces unités de volume global demeurent mathématiquement fossilisées.",
-                    "Singulier constant garanti : aucune terminaison en « s » ajoutant une portée plurielle n'est permise dans l'énonciation de {$n}. Le seul motif qui provoquerait cette tournure asymétrique résiderait dans une estimation vaste insaisissable (ex: 'thousands of books').",
-                    "Avertissement grammatical anglophone pour {$n} : bien que ce montant soit par essence pluriel quant à sa valeur, les termes multiplicateurs pivots ('thousand') ne doivent jamais recevoir de consonne terminale pluralisante.",
-                    "Les piliers de jauge tels que 'thousand' demeurent figés au singulier pur dans la prose anglophone. En rédigeant le libellé de {$n}, mémorisez bien cette invariabilité formelle.",
-                    "L'anglais interdit la présence d'un pluriel de quantité (« s » final) sur les mots d'échelle pour encadrer le résultat strict de {$n}."
+                    "Unshakable Anglo-Saxon invariability rule: in the scenario of {$n}, terms like 'hundred', 'thousand' as well as major tiers like 'million' fiercely preserve the singular as soon as they carry a definite meaning.",
+                    "Did you know? When writing the result associated with {$n} in an English format, never try under any pretext to force the plural with an 's' on numerical magnitude lexical markers (e.g., 'thousand'). These global volume units remain mathematically fossilized.",
+                    "Constant singular guaranteed: no 's' ending adding a plural scope is permitted in the enunciation of {$n}. The only motive that would provoke this asymmetrical turn would reside in a vast elusive estimate (e.g., 'thousands of books').",
+                    "English grammatical warning for {$n}: although this amount is essentially plural as for its value, the pivot multiplier terms ('thousand') must never receive a pluralizing terminal consonant.",
+                    "Gauge pillars such as 'thousand' remain frozen in pure singular in English prose. When drafting the wording of {$n}, memorize well this formal invariability.",
+                    "English prohibits the presence of a quantity plural ('s' final) on scale words to frame the strict result of {$n}."
                 ]);
             }
 
             // Punctuation Difference
             if ($n >= 1000) {
                 $texts[] = $pick([
-                    "Contraste de ponctuation radical pour un gabarit tel que {$n} : les cultures anglophones excluent volontairement l'espace usuel (standard européen) ou le point pour marquer graphiquement les grappes de milieux par tris ; ils convoquent systématiquement l'usage natif de la virgule isolatrice (,).",
-                    "Rupture sur le système décimal anglicisé appliqué à {$n} : afin d'orienter le confort de survol visuel et découper les strates par paquets de mille, ces populations apposent mécaniquement la virgule (ex: 1,000) et se gardent bien du point, qu'elles cantonnent symboliquement à la décimation fractionnelle.",
-                    "Si jamais vous couchiez {$n} sur écrit commercial financier rédigé en syntaxe américaine, gardez fermement à l'esprit que l'indicateur universel de compartimentation des trois zéros s'avère irrévocablement symbolisé par the 'comma' (notre modeste virgule de coupure).",
-                    "La signalétique arithmétique globale change la donne face à {$n} : là où la France pose un espace visuel pour aérer les gros numéros, le cartulaire conventionnel UK/US exécute cette césure au moyen exclusif de la virgule fine.",
-                    "Pour scinder par triplet ce bloc numérique {$n}, l'espace typographique adoré des Européens est banni sur les écrits anglais. Ce langage impose sa sacro-sainte ',' en guise de jalon."
+                    "Radical punctuation contrast for a format like {$n}: English-speaking cultures voluntarily exclude the usual space (European standard) or the period to graphically mark the clusters of thousands by threes; they systematically summon the native use of the isolating comma (,).",
+                    "Rupture on the Anglicized decimal system applied to {$n}: in order to guide visual scanning comfort and cut the strata by packets of a thousand, these populations mechanically affix the comma (e.g., 1,000) and carefully avoid the period, which they symbolically confine to fractional decimation.",
+                    "If you ever lay down {$n} on a financial commercial piece written in American syntax, firmly keep in mind that the universal indicator of compartmentalization of three zeros turns out to be irrevocably symbolized by the 'comma'.",
+                    "The global arithmetic signaling changes the rules face to {$n}: where France places a visual space to aerate large numbers, the conventional UK/US standard executes this caesura exclusively by means of the fine comma.",
                 ]);
             }
 
             // General English Rule 1: Capitalization
             $texts[] = $pick([
-                "Règle de capitalisation grammaticale anglophone : peu importe la longueur du nombre {$n}, les mots le composant s'écrivent entièrement en minuscules, à l'exception évidente du début de phrase.",
-                "En typographie britannique et américaine, notez que l'écriture du résultat de {$n} s'effectue exclusivement en bas-de-casse (minuscules). On ne met de majuscule qu'au tout premier mot de la ligne.",
-                "Contrairement à certains usages de titraille, le corps du texte stipule que le développement littéral de {$n} en anglais rejette formellement les majuscules en son milieu.",
-                "Détail orthographique récurrent avec {$n} en langue anglaise : aucun substantif de valeur ou unité ne prend la majuscule. L'ensemble s'étale uniformément en minuscules courantes.",
-                "Lors de la transcription formelle de {$n}, le dictionnaire anglais impose une casse mineure intégrale sur tous les vocables générés."
+                "English grammatical capitalization rule: no matter the length of the number {$n}, the words composing it are written entirely in lowercase, with the obvious exception of the beginning of a sentence.",
+                "In British and American typography, note that writing the result of {$n} is done exclusively in lowercase. We only capitalize the very first word of the line.",
+                "Contrary to some titling usages, the body of the text stipulates that the literal development of {$n} in English formally rejects capitalization in its middle.",
+                "Recurring orthographic detail with {$n} in the English language: no noun of value or unit takes a capital letter. The whole spreads evenly in current lowercase.",
+                "During the formal transcription of {$n}, the English dictionary imposes an integral minor case on all the generated words."
             ]);
 
             // General English Rule 2: Pluralization of the number itself
             if ($n >= 10) {
                 $texts[] = $pick([
-                    "Curiosité linguistique : en anglais, s'il faut parler des années ou des valeurs de {$n} au pluriel (ex: 'les années {$n}'), on accole simplement un 's' final au mot sans apostrophe (ex: {$n}s).",
-                    "Formatage usuel : lorsque le contexte force le pluriel sur le nombre complet de {$n} (pour désigner une décennie ou un lot), la grammaire anglophone contemporaine proscrit l'apostrophe et soude directement le 's' au vocable pertinent.",
-                    "Si le scénario implique de décliner l'idée générique de {$n} au pluriel (ex: 'des dizaines de {$n}'), l'Anglais de base suffixera la matrice numérale par une simple lettre 's' finale.",
-                    "Pour exprimer collectivement la notion de plusieurs '{$n}', oubliez la syntaxe possessive à apostrophe ; les manuels de style prônent le suffixe brut 's' accouplé au segment terminal.",
-                    "L'application du marqueur pluriel général sur l'entité globale de {$n} obéit à une règle directe en anglais : on greffe un 's' collé sans distinction au dernier terme de l'ensemble."
+                    "Linguistic curiosity: in English, if we must speak of the years or values of {$n} in the plural (e.g., 'the {$n}s'), we simply append a final 's' to the word without an apostrophe.",
+                    "Usual formatting: when the context forces the plural on the complete number of {$n} (to designate a decade or a batch), contemporary English grammar bans the apostrophe and directly welds the 's' to the relevant word.",
+                    "If the scenario involves declining the generic idea of {$n} in the plural (e.g., 'tens of {$n}'), basic English will suffix the numeral matrix with a simple final letter 's'.",
+                    "To collectively express the notion of several '{$n}', forget the possessive syntax with apostrophe; style manuals advocate the raw suffix 's' coupled to the terminal segment.",
+                    "The application of the general plural marker on the overall entity of {$n} obeys a direct rule in English: we graft a glued 's' indiscriminately to the last term of the set."
                 ]);
             }
         }
 
         // Limit to max 4 diverse rules and randomly shuffle to make it look highly dynamic without losing order
         if (empty($texts)) {
-            $texts[] = "La traduction et l'écriture des nombres requièrent la plus grande attention aux règles d'accord, de conjugaison et de ponctuation fixées soit par l'Académie française, soit par les universités linguistiques anglophones.";
+            $texts[] = "The translation and writing of numbers require the utmost attention to rules of agreement, grammar, and punctuation set by both grammar institutions and English linguistics universities.";
         } else {
             // Select up to 4 applicable rules to keep UI balanced
             $texts = array_slice($texts, 0, 4);
@@ -525,51 +533,74 @@ class ContentGenerator
             return $variations[$n % count($variations)];
         };
 
-        $ordinal = self::getEnglishOrdinal($result_en_plain);
+        if ($n === 1) {
+            $ordinal = 'Premier';
+        } else {
+            $text = strtolower(trim($result_en_plain));
+            preg_match('/([ \-]?)([a-z]+)$/', $text, $matches);
+            if ($matches) {
+                $separator = $matches[1];
+                $lastWord = $matches[2];
+                $prefix = substr($text, 0, -strlen($matches[0]));
+                if ($lastWord === 'un')
+                    $ordinalLast = 'unième';
+                elseif ($lastWord === 'neuf')
+                    $ordinalLast = 'neuvième';
+                elseif ($lastWord === 'cinq')
+                    $ordinalLast = 'cinquième';
+                elseif (substr($lastWord, -1) === 'e')
+                    $ordinalLast = substr($lastWord, 0, -1) . 'ième';
+                else
+                    $ordinalLast = $lastWord . 'ième';
+                $ordinal = ucfirst($prefix . $separator . $ordinalLast);
+            } else {
+                $ordinal = ucfirst($text . 'ième');
+            }
+        }
         $ord_lower = strtolower($ordinal);
         $res_lower = strtolower($result_en_plain);
 
         // Ordinal Spintax
         $facts[] = $pick([
-            "<strong>Forme ordinale :</strong> Pour indiquer une position (le {$n}ème), la traduction est \"{$ordinal}\". L'anglais recourt aux nombres ordinaux : <em>the {$ord_lower}</em>.",
-            "<strong>Comment dire le {$n}e :</strong> En anglais, l'équivalent de « le {$n}ème » s'écrit de manière ordinale : <em>the {$ord_lower}</em>.",
-            "<strong>Le {$n}ème en anglais :</strong> Si votre but est d'exprimer un rang (le {$n}e composant), la bonne expression est <em>the {$ord_lower}</em>.",
-            "<strong>Classement et ordre :</strong> Pour verbaliser la {$n}ème place ou position, le terme anglophone adéquat est formellement <em>the {$ord_lower}</em>."
+            "<strong>Ordinal form:</strong> To indicate a position (the {$n}th), the grammatical translation is \"{$ordinal}\". French broadly utilizes ordinal numbers: <em>le {$ord_lower}</em>.",
+            "<strong>How to say the {$n}th:</strong> In French, the exact equivalent of the rank {$n} is written ordinally: <em>le {$ord_lower}</em>.",
+            "<strong>The {$n}th in French:</strong> If your goal is to express a rank (the {$n}th component), the correct expression is firmly <em>le {$ord_lower}</em>.",
+            "<strong>Ranking and ordering:</strong> To verbalize the {$n}th place or position, the adequate French phrasing is formally <em>le {$ord_lower}</em>."
         ]);
 
-        // Age Context (often searched "comment on dit j'ai X ans en anglais")
+        // Age Context
         if ($n >= 1 && $n <= 110) {
             $facts[] = $pick([
-                "<strong>L'âge de {$n} ans :</strong> Pour dire \"j'ai {$n} ans\", l'anglais emploie le verbe 'to be' (être). On traduira donc par : <em>I am {$res_lower} years old</em>.",
-                "<strong>Comment dire j'ai {$n} ans :</strong> Contrairement au français, l'anglais ne dit pas « j'ai », mais « je suis vieux de ». D'où la phrase <em>I am {$res_lower} years old</em>.",
-                "<strong>Exprimer l'âge ({$n} ans) :</strong> Si vous voulez parler d'un âge précis comme {$n} ans, la structure grammaticale britannique impose le verbe être : <em>I'm {$res_lower} years old</em>.",
-                "<strong>Dire son âge :</strong> Pour indiquer votre âge de {$n} ans, n'utilisez jamais le verbe « to have ». La traduction exacte est <em>I am {$res_lower} years old</em>."
+                "<strong>The age of {$n} years old:</strong> To express \"I am {$n} years old\", French uses the verb 'to have' (avoir). It translates to: <em>J'ai {$res_lower} ans</em>.",
+                "<strong>How to express I am {$n} years old:</strong> Unlike English which uses 'to be', French uses 'to have'. Hence the proper phrase <em>J'ai {$res_lower} ans</em>.",
+                "<strong>Expressing age ({$n} years):</strong> If you want to talk about a specific age like {$n} years old, French grammatical structure dictates the verb 'avoir': <em>J'ai {$res_lower} ans</em>.",
+                "<strong>Stating one's age:</strong> To state your age of {$n} years, never use the verb \"to be\" in French. The exact and correct translation is <em>J'ai {$res_lower} ans</em>."
             ]);
         }
 
         // Decades context ("les années 90")
         if ($n >= 10 && $n <= 90 && $n % 10 === 0) {
             $facts[] = $pick([
-                "<strong>Décennie (Les années {$n}) :</strong> Pour parler de la décennie des années {$n} en anglais, on ajoute un 's' final sans apostrophe. On dira par exemple <em>the {$res_lower}s</em>.",
-                "<strong>Les années {$n} en anglais :</strong> En abordant cette décennie historique, la grammaire exige simplement l'ajout direct du pluriel : <em>the {$res_lower}s</em>.",
-                "<strong>Époque des années {$n} :</strong> Si vous faites référence à la culture de cette tranche d'âge, l'anglais accole un 's' à la fin du chiffre rond : <em>the {$res_lower}s</em>."
+                "<strong>Decade (The {$n}s):</strong> To talk about the {$n}s decade in French, you use the plural article followed by the word 'années'. For example, you say <em>les années {$res_lower}</em>.",
+                "<strong>The {$n}s in French:</strong> When discussing this historical decade, French grammar requires the word 'années': <em>les années {$res_lower}</em>.",
+                "<strong>Era of the {$n}s:</strong> If you are referring to the general culture of this historical epoch, French uses: <em>les années {$res_lower}</em>."
             ]);
         }
 
         // Specific Year context (19XX, 20XX)
         if ($n >= 1900 && $n <= 2099) {
             $facts[] = $pick([
-                "<strong>Date et année ({$n}) :</strong> S'il s'agit d'une année historique, la lecture omet souvent le « hundred ». L'anglais la découpe usuellement en deux blocs de chiffres à prononcer.",
-                "<strong>Prononcer l'année {$n} :</strong> Gardez en tête qu'un millésime tel que {$n} se scinde presque toujours en deux nombres distincts à l'oral anglophone pour plus de fluidité."
+                "<strong>Date and year ({$n}):</strong> If it is a historical year, French reading often groups the digits. For example, {$n} can sometimes be pronounced with 'cent' (e.g., dix-neuf cent...).",
+                "<strong>Pronouncing the year {$n}:</strong> Keep in mind that a vintage such as {$n} in French can be read conventionally or using the 'cent' grouping for years before 2000."
             ]);
         }
 
         // Generic pluralization rule (fallback if few rules match)
         if ($n >= 100) {
             $facts[] = $pick([
-                "<strong>Astuce de grammaire :</strong> Contrairement à de nombreuses langues, l'anglais interdit formellement de mettre un \"s\" pluriel sur les mots servant de multiplicateurs pour le nombre {$n} (tels que <em>hundred</em>, <em>thousand</em> ou <em>million</em>).",
-                "<strong>Règle du pluriel :</strong> Lorsque vous prononcez un montant global comme {$n}, souvenez-vous que les unités de mille ou de cent restent absolument invariables en anglais courant.",
-                "<strong>Invariabilité mathématique :</strong> Pour la valeur de {$n}, le mot signifiant cent ou mille (s'il est présent) ne prend pas de 's'. C'est une faute classique que font les francophones."
+                "<strong>Grammar tip:</strong> Unlike English, French applies specific plural rules to numbers like {$n}. The word <em>vingt</em> and <em>cent</em> can take an 's' under certain multiplication conditions.",
+                "<strong>Plural rule:</strong> When writing a global amount like {$n} in French, remember that units of hundred (cent) or twenty (vingt) might agree in the plural if they end the number.",
+                "<strong>Mathematical phrasing:</strong> For the value of {$n}, the French spelling requires strict adherence to hyphens and specific plural exceptions for <em>cent</em> and <em>vingt</em>."
             ]);
         }
 

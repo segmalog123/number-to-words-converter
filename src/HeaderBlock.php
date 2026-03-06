@@ -51,7 +51,7 @@ class HeaderBlock
         global $wp_query;
         $number_to_convert = $wp_query->get('number_id');
         $ntw_page = $wp_query->get('ntw_page');
-        if (empty($number_to_convert) && !is_front_page() && $ntw_page !== 'convertisseur-anglais') {
+        if (empty($number_to_convert) && !is_front_page() && $ntw_page !== 'numbers-in-french') {
             return;
         }
         $this->renderBeforeBlock();
@@ -71,6 +71,7 @@ class HeaderBlock
         }
 
         $current_url = home_url(add_query_arg([], $wp->request ?? ''));
+        $ntw_page = $wp_query->get('ntw_page');
         $convert_to = 'en'; // Tool 1 (en) is default.
         if (strpos($current_url, '/how-to-say-') !== false) {
             $convert_to = 'fr'; // Tool 2 (fr) context.
@@ -87,14 +88,16 @@ class HeaderBlock
                     <span style="font-size: 16px; line-height: 2em;">
                         <?php
                         if (strpos($current_url, '/how-to-say-') !== false) {
-                            echo ConverterHelper::convert('', 'h2');
+                            echo esc_html(ConverterHelper::convert($number_to_convert, 'h2'));
+                        } elseif ($ntw_page === 'numbers-in-french') {
+                            echo 'learn how to count in the French language with numbers 1-100';
                         } else {
                             ?>
-                            Write Numbers in Words and
-                            <a href="<?php echo esc_url(site_url('/category/macro-excel/')); ?>">
-                                <span style="color:#32A0E3;text-decoration: underline;">Download Excel Macros for Free</span>
-                            </a>
-                            Here
+                            <?php if (!empty($number_to_convert)): ?>
+                                Spelling of <?php echo esc_html($number_to_convert); ?> in words
+                            <?php else: ?>
+                                Spelling of numbers in words
+                            <?php endif; ?>
                             <?php
                         }
                         ?>
@@ -132,13 +135,19 @@ class HeaderBlock
                 <div class="e3lan e3lan-below_header" style="font-size: 12px; line-height: 2em;padding: 0px 5px">
                     <?php
                     $number_to_convert = $wp_query->get('number_id');
+                    $ntw_page_after = $wp_query->get('ntw_page');
                     if (isset($number_to_convert) && $number_to_convert !== '') {
                         ?>
                         <h1><?php echo esc_html(ConverterHelper::convert($number_to_convert, 'h1')); ?></h1>
                         <?php
+                    } elseif ($ntw_page_after === 'numbers-in-french') {
+                        ?>
+                        <h1>Convert English Numbers (1-100 and Beyond) to French Words Easily</h1>
+                        <?php
                     } elseif (is_home() || is_front_page()) {
                         ?>
-                        <h1>Numbers to Words Converter - Spell Numbers Easily</h1>
+                        <p style="font-size: 1.6em; font-weight: 700; line-height: 1.3; margin: 0; color: inherit;">How to write
+                            numbers in words perfectly without mistakes ?</p>
                         <?php
                     } else {
                         ?>

@@ -58,7 +58,7 @@ class SeoController
     private function isEnglishLandingPage()
     {
         global $wp_query;
-        return $wp_query->get('ntw_page') === 'convertisseur-anglais';
+        return $wp_query->get('ntw_page') === 'numbers-in-french';
     }
 
     /**
@@ -70,7 +70,7 @@ class SeoController
     public function filterTitle($title)
     {
         if ($this->isEnglishLandingPage()) {
-            return 'Convertisseur Chiffre en Lettre Anglais - Convertir Nombre en Lettres';
+            return 'Free English to French Converter | Master French numbers 1-100';
         }
         $number = $this->getNumberId();
         if ($number !== false) {
@@ -88,7 +88,7 @@ class SeoController
     public function filterMetaDesc($desc)
     {
         if ($this->isEnglishLandingPage()) {
-            return 'Convertissez instantanément vos chiffres en lettres anglaises. Outil gratuit pour écrire les nombres en anglais, idéal pour les chèques, Excel et documents officiels.';
+            return 'Convert English numbers to French words with our free tool. Get pronunciation tips, rules, and exercises. Master French numbers 1-100 easily!';
         }
         $number = $this->getNumberId();
         if ($number !== false) {
@@ -122,7 +122,7 @@ class SeoController
     public function outputCanonical()
     {
         if ($this->isEnglishLandingPage()) {
-            echo '<link rel="canonical" href="' . esc_url(home_url('/convertisseur-anglais/')) . '" />' . "\n";
+            echo '<link rel="canonical" href="' . esc_url(home_url('/numbers-in-french/')) . '" />' . "\n";
             return;
         }
         $number = $this->getNumberId();

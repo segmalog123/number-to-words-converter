@@ -43,8 +43,8 @@ class RewriteRules
 
         // Add support for the non-dynamic English landing page.
         add_rewrite_rule(
-            '^convertisseur-anglais/?$',
-            'index.php?ntw_page=convertisseur-anglais',
+            '^numbers-in-french/?$',
+            'index.php?ntw_page=numbers-in-french',
             'top'
         );
     }
@@ -57,7 +57,7 @@ class RewriteRules
     public function registerQueryVars($vars)
     {
         $vars[] = 'number_id';
-        $vars[] = 'ntw_page'; // used for /convertisseur-anglais/
+        $vars[] = 'ntw_page'; // used for /numbers-in-french/
         return $vars;
     }
 

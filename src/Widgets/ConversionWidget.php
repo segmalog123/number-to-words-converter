@@ -92,14 +92,14 @@ class ConversionWidget extends WP_Widget
             }
 
             $anchor_texts_fr = [
-                'Convertir %s € en lettres',
-                'Le montant %s en toutes lettres',
-                '%s dinar algérien en lettre',
-                'Écrire %s euro en lettres',
-                'Orthographe du chiffre %s',
-                'Traduction pour le numéro %s',
-                'numero %s en lettre dinars',
-                'Comment écrire le montant %s'
+                'Spell %s in words',
+                'Spelling of the number %s',
+                'How do you spell %s',
+                'Write %s in words',
+                'The number %s spelling',
+                'Translate the number %s',
+                '%s in words spelling',
+                'How to write the amount %s'
             ];
 
             echo '<div class="cel-widget-section">';
@@ -118,15 +118,15 @@ class ConversionWidget extends WP_Widget
         // -- ENGLISH SECTION --
         if ($show_english) {
             $anchor_texts_en = [
-                '%s en anglais',
-                'Comment on dit %s en anglais',
-                '%s anglais',
-                'Comment dit-on %s en anglais',
-                'Comment dire %s en anglais',
-                '%s en anglais en lettre',
-                'Comment écrire %s en lettre anglais',
-                'Traduire %s en anglais',
-                '%s%% en anglais'
+                '%s in French',
+                'How to say %s in French',
+                'French translation for %s',
+                'How do you say %s in French',
+                'How to write %s in French',
+                '%s in French spelling',
+                'Translate %s to French',
+                'French word for %s',
+                'Saying %s%% in French'
             ];
 
             echo '<div class="cel-widget-section">';
@@ -171,59 +171,58 @@ class ConversionWidget extends WP_Widget
     public function form($instance)
     {
         $show_french = isset($instance['show_french']) ? (bool) $instance['show_french'] : true;
-        $title_french = !empty($instance['title_french']) ? $instance['title_french'] : 'Nombres similaires à convertir';
+        $title_french = !empty($instance['title_french']) ? $instance['title_french'] : 'Similar numbers in English';
         $french_numbers = !empty($instance['french_numbers']) ? $instance['french_numbers'] : '';
 
         $show_english = isset($instance['show_english']) ? (bool) $instance['show_english'] : true;
-        $title_english = !empty($instance['title_english']) ? $instance['title_english'] : 'Nombres similaires en anglais';
+        $title_english = !empty($instance['title_english']) ? $instance['title_english'] : 'Similar numbers in French';
         $english_numbers = !empty($instance['english_numbers']) ? $instance['english_numbers'] : '';
         ?>
 
-        <p><strong>Section Française</strong></p>
+        <p><strong>English Links Section</strong></p>
         <p>
             <input class="checkbox" type="checkbox" <?php checked($show_french); ?>
                 id="<?php echo esc_attr($this->get_field_id('show_french')); ?>"
                 name="<?php echo esc_attr($this->get_field_name('show_french')); ?>" />
-            <label for="<?php echo esc_attr($this->get_field_id('show_french')); ?>">Afficher les liens français</label>
+            <label for="<?php echo esc_attr($this->get_field_id('show_french')); ?>">Show english links</label>
         </p>
         <p>
-            <label for="<?php echo esc_attr($this->get_field_id('title_french')); ?>">Titre (Français) :</label>
+            <label for="<?php echo esc_attr($this->get_field_id('title_french')); ?>">Title (English):</label>
             <input class="widefat" id="<?php echo esc_attr($this->get_field_id('title_french')); ?>"
                 name="<?php echo esc_attr($this->get_field_name('title_french')); ?>" type="text"
                 value="<?php echo esc_attr($title_french); ?>">
         </p>
         <p>
-            <label for="<?php echo esc_attr($this->get_field_id('french_numbers')); ?>">Nombres Français (séparés par des
-                virgules) :</label>
+            <label for="<?php echo esc_attr($this->get_field_id('french_numbers')); ?>">English Numbers (comma
+                separated):</label>
             <textarea class="widefat" rows="3" id="<?php echo esc_attr($this->get_field_id('french_numbers')); ?>"
-                name="<?php echo esc_attr($this->get_field_name('french_numbers')); ?>"><?php echo esc_textarea($french_numbers); ?></textarea>
-            <small>Laissez vide pour générer automatiquement les nombres.</small>
+                        name="<?php echo esc_attr($this->get_field_name('french_numbers')); ?>"><?php echo esc_textarea($french_numbers); ?></textarea>
+            <small>Leave empty to automatically generate numbers.</small>
         </p>
 
         <hr style="margin:15px 0;">
 
-        <p><strong>Section Anglaise</strong></p>
+        <p><strong>French Links Section</strong></p>
         <p>
-            <input class="checkbox" type="checkbox" <?php checked($show_english); ?>
-                id="<?php echo esc_attr($this->get_field_id('show_english')); ?>"
-                name="<?php echo esc_attr($this->get_field_name('show_english')); ?>" />
-            <label for="<?php echo esc_attr($this->get_field_id('show_english')); ?>">Afficher les liens anglais</label>
+            <input class="checkbox" type="checkbox" <?php checked($show_english); ?> id="<?php echo esc_attr($this->get_field_id('show_english')); ?>"
+            name="<?php echo esc_attr($this->get_field_name('show_english')); ?>" />
+            <label for="<?php echo esc_attr($this->get_field_id('show_english')); ?>">Show french links</label>
         </p>
         <p>
-            <label for="<?php echo esc_attr($this->get_field_id('title_english')); ?>">Titre (Anglais) :</label>
+            <label for="<?php echo esc_attr($this->get_field_id('title_english')); ?>">Title (French):</label>
             <input class="widefat" id="<?php echo esc_attr($this->get_field_id('title_english')); ?>"
-                name="<?php echo esc_attr($this->get_field_name('title_english')); ?>" type="text"
-                value="<?php echo esc_attr($title_english); ?>">
+            name="<?php echo esc_attr($this->get_field_name('title_english')); ?>" type="text"
+            value="<?php echo esc_attr($title_english); ?>">
         </p>
         <p>
-            <label for="<?php echo esc_attr($this->get_field_id('english_numbers')); ?>">Nombres Anglais (séparés par des
-                virgules) :</label>
+            <label for="<?php echo esc_attr($this->get_field_id('english_numbers')); ?>">French Numbers (comma
+                separated):</label>
             <textarea class="widefat" rows="3" id="<?php echo esc_attr($this->get_field_id('english_numbers')); ?>"
                 name="<?php echo esc_attr($this->get_field_name('english_numbers')); ?>"><?php echo esc_textarea($english_numbers); ?></textarea>
-            <small>Laissez vide pour générer automatiquement les nombres.</small>
+            <small>Leave empty to automatically generate numbers.</small>
         </p>
 
-        <p><em>Le widget affichera automatiquement 5 liens VIP générés dynamiquement pour chaque langue cochée.</em></p>
+        <p><em>The widget will automatically display 5 dynamically generated VIP links for each checked language.</em></p>
         <?php
     }
 

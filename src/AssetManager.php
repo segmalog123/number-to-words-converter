@@ -42,7 +42,7 @@ class AssetManager
             true
         );
         // Detect language context for the search bar
-        $is_french_page = get_query_var('ntw_page') === 'convertisseur-anglais'
+        $is_french_page = get_query_var('ntw_page') === 'numbers-in-french'
             || strpos($_SERVER['REQUEST_URI'] ?? '', '/how-to-say-') !== false;
 
         wp_localize_script(
@@ -68,7 +68,7 @@ class AssetManager
 
         // Result page styles (on conversion result pages OR English landing page)
         // Reuse the $is_english_page check from above (partial match) or direct check
-        $should_load_css = get_query_var('number_id') !== '' || get_query_var('ntw_page') === 'convertisseur-anglais';
+        $should_load_css = get_query_var('number_id') !== '' || get_query_var('ntw_page') === 'numbers-in-french';
 
         if ($should_load_css) {
             wp_enqueue_style(

@@ -49,9 +49,9 @@ $cheque_data = \NumberToWordsConverter\ContentGenerator::getChequeData($number_t
 
 if ($is_vip) {
     $math_facts = \NumberToWordsConverter\ContentGenerator::getMathFacts($number_to_convert);
-    $grammar_rules = \NumberToWordsConverter\ContentGenerator::getGrammarRules($number_to_convert);
+    $grammar_rules = \NumberToWordsConverter\ContentGenerator::getGrammarRules($number_to_convert, 'en');
     $trivia = \NumberToWordsConverter\ContentGenerator::getContextualTrivia($number_to_convert);
-    $dynamic_spelling = \NumberToWordsConverter\ContentGenerator::getDynamicSpellingText($number_to_convert, 'fr');
+    $dynamic_spelling = \NumberToWordsConverter\ContentGenerator::getDynamicSpellingText($number_to_convert, 'en');
 }
 ?>
 
@@ -101,10 +101,10 @@ if ($is_vip) {
                     title="Copy this amount">⧉</button>
             </div>
             <div class="cel-card"
-                style="grid-column: 1 / -1; display:flex; align-items:center; justify-content:center; background:#e8f8f0; border-color:#b6e8c8;">
-                <h4 class="cel-card-label" style="margin: 0 10px 0 0;">🇬🇧 En anglais</h4>
+                style="grid-column: 1 / -1; display:flex; align-items:center; justify-content:center; background:#ebf5fa; border-color:#b6dce8;">
+                <h4 class="cel-card-label" style="margin: 0 10px 0 0;">🇫🇷 In French</h4>
                 <p class="cel-card-value" style="margin:0;">
-                    <a href="<?php echo $url_en; ?>" style="color:#1a7a40; font-weight:700;">
+                    <a href="<?php echo $url_en; ?>" style="color:#1a5c7a; font-weight:700;">
                         See French translation for number <?php echo esc_html($number_to_convert); ?> →
                     </a>
                 </p>
@@ -124,13 +124,13 @@ if ($is_vip) {
         <div class="cel-cheque">
             <div class="cel-cheque-top">
                 <div class="cel-cheque-date">
-                    <span class="cel-cheque-label">LE</span>
+                    <span class="cel-cheque-label">DATE</span>
                     <?php echo esc_html($cheque_data['date']); ?>
                 </div>
             </div>
 
             <div class="cel-cheque-row">
-                <span class="cel-cheque-label">PAYEZ CONTRE CE CHÈQUE</span>
+                <span class="cel-cheque-label">PAY AGAINST THIS CHEQUE</span>
                 <div class="cel-cheque-amount-box">
                     # <?php echo esc_html($cheque_data['amount_num']); ?> #
                 </div>
@@ -190,7 +190,7 @@ if ($is_vip) {
 
             <!-- ═══ MATH & GRAMMAR ═══════════════════════════════════════ -->
             <div class="cel-section">
-                <h2 class="cel-section-title">Propriétés Mathematiques de <?php echo esc_html($number_to_convert); ?></h2>
+                <h2 class="cel-section-title">Mathematical Properties of <?php echo esc_html($number_to_convert); ?></h2>
                 <ul style="margin:0; padding-left:20px; color:#444;">
                     <?php foreach ($math_facts as $fact): ?>
                         <li style="margin-bottom:6px;"><?php echo esc_html($fact); ?></li>
@@ -212,8 +212,7 @@ if ($is_vip) {
 
             <!-- ═══ SPELLING RULES (Dynamic) ═════════════════════════════ -->
             <div class="cel-section">
-                <h2 class="cel-section-title">Spelling rules for the number
-                    <?php echo esc_html($number_to_convert); ?>
+                <h2 class="cel-section-title">Spelling rules for the number <?php echo esc_html($number_to_convert); ?>
                 </h2>
                 <?php foreach ($dynamic_spelling as $text): ?>
                     <p><?php echo esc_html($text); ?></p>

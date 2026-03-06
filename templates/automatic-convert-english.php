@@ -50,9 +50,9 @@ $cheque_data = \NumberToWordsConverter\ContentGenerator::getChequeData($number_t
 
 if ($is_vip) {
     $math_facts = \NumberToWordsConverter\ContentGenerator::getMathFacts($number_to_convert);
-    $grammar_rules = \NumberToWordsConverter\ContentGenerator::getGrammarRules($number_to_convert, 'en');
+    $grammar_rules = \NumberToWordsConverter\ContentGenerator::getGrammarRules($number_to_convert, 'fr');
     $trivia = \NumberToWordsConverter\ContentGenerator::getContextualTrivia($number_to_convert);
-    $dynamic_spelling = \NumberToWordsConverter\ContentGenerator::getDynamicSpellingText($number_to_convert, 'en');
+    $dynamic_spelling = \NumberToWordsConverter\ContentGenerator::getDynamicSpellingText($number_to_convert, 'fr');
 }
 ?>
 
@@ -63,7 +63,6 @@ if ($is_vip) {
 
         <!-- ═══ HERO: Main Result ═══════════════════════════════════ -->
         <div class="cel-result-hero">
-            <p class="cel-h1">How do you translate <?php echo esc_html($number_to_convert); ?> in French?</p>
             <div class="cel-result-wrapper"
                 style="display:flex; align-items:center; justify-content:center; gap:15px; flex-wrap:wrap;">
                 <p class="cel-main-result" id="celMainResultText" style="margin:0;">
@@ -79,19 +78,19 @@ if ($is_vip) {
         <!-- ═══ CURRENCY CARDS ══════════════════════════════════════ -->
         <div class="cel-cards-grid">
             <div class="cel-card">
-                <p class="cel-card-label">🇺🇸 US Dollars in French</p>
+                <p class="cel-card-label">🇺🇸 US Dollar ($)</p>
                 <p class="cel-card-value"><?php echo esc_html($result_usd); ?></p>
             </div>
             <div class="cel-card">
-                <p class="cel-card-label">🇬🇧 British Pounds in French</p>
+                <p class="cel-card-label">🇬🇧 British Pound (£)</p>
                 <p class="cel-card-value"><?php echo esc_html($result_gbp); ?></p>
             </div>
             <div class="cel-card">
-                <p class="cel-card-label">🍁 Canadian Dollar in French</p>
+                <p class="cel-card-label">🍁 Canadian Dollar (CAD)</p>
                 <p class="cel-card-value"><?php echo esc_html($result_cad); ?></p>
             </div>
             <div class="cel-card">
-                <p class="cel-card-label">💶 Euros in French</p>
+                <p class="cel-card-label">💶 Euro (€)</p>
                 <p class="cel-card-value"><?php echo esc_html($result_eur); ?></p>
             </div>
             <div class="cel-card"

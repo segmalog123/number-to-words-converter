@@ -29,15 +29,14 @@ jQuery(document).ready(function ($) {
     function process_number() {
         var convert_input = $.trim($('.convert-input').val());
 
-        var lang = jsdata.default_lang || 'fr';
-        var slug1 = lang === 'en' ? 'comment-on-dit' : 'ecrire';
-        var slug2 = lang === 'en' ? '-en-anglais' : '-en-lettre';
+        var lang = jsdata.default_lang || 'en';
+        var slug1 = lang === 'fr' ? 'how-to-say' : 'how-do-you-spell-';
+        var slug2 = lang === 'fr' ? '-in-french' : '-in-words';
 
-        // Override if button has explicit data-convert attribute
-        if ($('.convert-button').attr('data-convert') == 'en') {
-            slug1 = 'comment-on-dit';
-            slug2 = '-en-anglais';
-            lang = 'en';
+        if ($('.convert-button').attr('data-convert') == 'fr') {
+            slug1 = 'how-to-say';
+            slug2 = '-in-french';
+            lang = 'fr';
         }
 
         // Strip leading zeros (only for integers)
@@ -80,7 +79,11 @@ jQuery(document).ready(function ($) {
         }
 
         // ── NORMAL MODE: navigate to the conversion URL ──────────────────
-        window.location.href = jsdata.site_url + '/' + slug1 + '/' + convert_input + slug2 + '/';
+        if (lang === 'en') {
+            window.location.href = jsdata.site_url + '/' + slug1 + convert_input + slug2 + '/';
+        } else {
+            window.location.href = jsdata.site_url + '/' + slug1 + '-' + convert_input + slug2 + '/';
+        }
     }
 
     // ── Download delay countdown ──────────────────────────────────────────

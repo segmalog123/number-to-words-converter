@@ -32,7 +32,7 @@ class TemplateLoader
         $number_to_convert = $wp_query->get('number_id');
         $ntw_page = $wp_query->get('ntw_page');
 
-        if (!empty($number_to_convert) || $ntw_page === 'convertisseur-anglais') {
+        if (!empty($number_to_convert) || $ntw_page === 'numbers-in-french') {
             $wp_query->is_404 = false;
             $wp_query->is_page = true;
             status_header(200);
@@ -49,9 +49,9 @@ class TemplateLoader
     {
         global $wp_query, $wp;
 
-        // English landing page: /convertisseur-anglais/
+        // French landing page: /numbers-in-french/
         $ntw_page = $wp_query->get('ntw_page');
-        if ($ntw_page === 'convertisseur-anglais') {
+        if ($ntw_page === 'numbers-in-french') {
             $plugin_template = NTW_PLUGIN_DIR . 'templates/convertisseur-anglais.php';
             if (file_exists($plugin_template)) {
                 return $plugin_template;

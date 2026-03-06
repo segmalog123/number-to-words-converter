@@ -445,25 +445,21 @@ class EnglishConverter
         } while ($i < strlen($number));
 
         $number = $ch;
+        $out = '';
         if (!is_numeric($ch)) {
             $out = 'Use a proper number format';
         } else {
             if ($to == '0') {
                 $out = self::convertIntegerToWords($number);
-            }
-            if ($to == '1') {
+            } elseif ($to == '1') {
                 $out = self::convertTowordsDollar($number);
-            }
-            if ($to == '2') {
+            } elseif ($to == '2') {
                 $out = self::convertTowordsPounds($number);
-            }
-            if ($to == '3') {
+            } elseif ($to == '3') {
                 $out = self::convertTowordsCanadian($number);
-            }
-            if ($to == '4') {
+            } elseif ($to == '4') {
                 $out = self::convertTowordsEuro($number);
-            }
-            if ($to == '5') {
+            } elseif ($to == '5' || $to === 'TND') {
                 $out = self::convertTowordsDinar($number);
             }
         }

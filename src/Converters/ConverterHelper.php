@@ -74,10 +74,20 @@ class ConverterHelper
         // This acts as the internal 'en' tool (English spelling)
         if ($context === 'en') {
             if ($action === 'convert') {
+                // Map named types to numeric codes expected by EnglishConverter
+                $type_map = [
+                    'USD' => '1',
+                    'GBP' => '2',
+                    'CAD' => '3',
+                    'EUR' => '4',
+                    'TND' => '5',
+                ];
+                $numeric_type = isset($type_map[$type]) ? $type_map[$type] : $type;
+
                 if ($type !== '') {
-                    $result = ucfirst(EnglishConverter::convertCurrencyToWords($number_to_convert, $type));
+                    $result = ucfirst(EnglishConverter::convertCurrencyToWords($number_to_convert, $numeric_type));
                 } else {
-                    $result = ucfirst(EnglishConverter::convertCurrencyToWords($number_to_convert, 0));
+                    $result = ucfirst(EnglishConverter::convertCurrencyToWords($number_to_convert, '0'));
                 }
             } elseif ($action === 'url') {
                 $result = site_url() . '/how-do-you-spell-' . $number_to_convert . '-in-words/';
@@ -88,9 +98,9 @@ class ConverterHelper
             } elseif ($action === 'bread') {
                 $result = 'Spelling of ' . $number_to_convert . ' in words';
             } elseif ($action === 'h1') {
-                $result = 'Spelling of ' . $number_to_convert . ' in words';
+                $result = 'How Do You Spell ' . $number_to_convert . ' In Words Perfectly Without Mistakes';
             } elseif ($action === 'h2') {
-                $result = 'Ecrire un Nombre en Lettres et Télécharger Gratuitement des Macros Excel';
+                $result = 'Spelling of ' . $number_to_convert . ' in words';
             }
         }
 
@@ -112,9 +122,9 @@ class ConverterHelper
             } elseif ($action === 'bread') {
                 $result = 'How to say ' . $number_to_convert . ' in french';
             } elseif ($action === 'h1') {
-                $result = 'What is ' . $number_to_convert . ' in french';
+                $result = 'How To Say ' . $number_to_convert . ' in French Perfectly Without Mistakes';
             } elseif ($action === 'h2') {
-                $result = 'Convertisseur Chiffre en Lettres en Anglais';
+                $result = 'What is ' . $number_to_convert . ' in french';
             }
         }
 
