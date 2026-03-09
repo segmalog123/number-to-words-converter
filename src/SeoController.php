@@ -51,6 +51,20 @@ class SeoController
     }
 
     /**
+     * Get the current factorial_id from the query.
+     * @return string|false
+     */
+    private function getFactorialId()
+    {
+        global $wp_query;
+        $factorial_id = $wp_query->get('factorial_id');
+        if (isset($factorial_id) && $factorial_id !== '') {
+            return $factorial_id;
+        }
+        return false;
+    }
+
+    /**
      * Check if current page is the English landing page.
      *
      * @return bool
@@ -59,6 +73,26 @@ class SeoController
     {
         global $wp_query;
         return $wp_query->get('ntw_page') === 'numbers-in-french';
+    }
+
+    /**
+     * Check if we are on the /factorial-calculator/ landing page.
+     * @return bool
+     */
+    private function isFactorialPage()
+    {
+        global $wp_query;
+        return $wp_query->get('ntw_page') === 'factorial-calculator';
+    }
+
+    /**
+     * Check if we are on the /factoring-calculator/ landing page.
+     * @return bool
+     */
+    private function isFactoringPage()
+    {
+        global $wp_query;
+        return $wp_query->get('ntw_page') === 'factoring-calculator';
     }
 
     /**
@@ -71,6 +105,16 @@ class SeoController
     {
         if ($this->isEnglishLandingPage()) {
             return 'Free English to French Converter | Master French numbers 1-100';
+        }
+        if ($this->isFactorialPage()) {
+            return 'N Factorial Calculator: Find n! & Factorial Formula';
+        }
+        if ($this->isFactoringPage()) {
+            return 'Factoring Calculator with Steps | Factor Completely';
+        }
+        $factorial = $this->getFactorialId();
+        if ($factorial !== false) {
+            return 'What is ' . $factorial . ' Factorial? (' . $factorial . '!) | Exact Result & Calculation';
         }
         $number = $this->getNumberId();
         if ($number !== false) {
@@ -89,6 +133,16 @@ class SeoController
     {
         if ($this->isEnglishLandingPage()) {
             return 'Convert English numbers to French words with our free tool. Get pronunciation tips, rules, and exercises. Master French numbers 1-100 easily!';
+        }
+        if ($this->isFactorialPage()) {
+            return 'Use our free n factorial calculator to instantly find n! for any number. Discover the factorial formula, step-by-step calculations, and rules for zero (0!).';
+        }
+        if ($this->isFactoringPage()) {
+            return 'Use our free factoring calculator with steps to instantly find the factors of any number, calculate prime factor decomposition, and find the GCF completely.';
+        }
+        $factorial = $this->getFactorialId();
+        if ($factorial !== false) {
+            return 'Find out exactly what ' . $factorial . ' factorial (' . $factorial . '!) is. See the step-by-step calculation, trailing zeros, and permutations for the number ' . $factorial . '.';
         }
         $number = $this->getNumberId();
         if ($number !== false) {
@@ -123,6 +177,15 @@ class SeoController
     {
         if ($this->isEnglishLandingPage()) {
             echo '<link rel="canonical" href="' . esc_url(home_url('/numbers-in-french/')) . '" />' . "\n";
+            return;
+        }
+        if ($this->isFactorialPage()) {
+            echo '<link rel="canonical" href="' . esc_url(home_url('/factorial-calculator/')) . '" />' . "\n";
+            return;
+        }
+        $factorial = $this->getFactorialId();
+        if ($factorial !== false) {
+            echo '<link rel="canonical" href="' . esc_url(home_url('/what-is-' . $factorial . '-factorial/')) . '" />' . "\n";
             return;
         }
         $number = $this->getNumberId();
@@ -205,6 +268,10 @@ class SeoController
         }
         $number = $this->getNumberId();
         if ($number !== false) {
+            return 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
+        }
+        $factorial = $this->getFactorialId();
+        if ($factorial !== false) {
             return 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
         }
         return $robots;

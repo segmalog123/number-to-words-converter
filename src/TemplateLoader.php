@@ -32,7 +32,12 @@ class TemplateLoader
         $number_to_convert = $wp_query->get('number_id');
         $ntw_page = $wp_query->get('ntw_page');
 
-        if (!empty($number_to_convert) || $ntw_page === 'numbers-in-french') {
+        if (
+            !empty($number_to_convert) || $ntw_page === 'numbers-in-french'
+            || $ntw_page === 'factorial-calculator'
+            || $ntw_page === 'factoring-calculator'
+            || !empty($wp_query->get('factorial_id'))
+        ) {
             $wp_query->is_404 = false;
             $wp_query->is_page = true;
             status_header(200);
@@ -53,6 +58,31 @@ class TemplateLoader
         $ntw_page = $wp_query->get('ntw_page');
         if ($ntw_page === 'numbers-in-french') {
             $plugin_template = NTW_PLUGIN_DIR . 'templates/convertisseur-anglais.php';
+            if (file_exists($plugin_template)) {
+                return $plugin_template;
+            }
+        }
+
+        // Factorial calculator landing page: /factorial-calculator/
+        if ($ntw_page === 'factorial-calculator') {
+            $plugin_template = NTW_PLUGIN_DIR . 'templates/factorial-calculator.php';
+            if (file_exists($plugin_template)) {
+                return $plugin_template;
+            }
+        }
+
+        // Factoring calculator landing page: /factoring-calculator/
+        if ($ntw_page === 'factoring-calculator') {
+            $plugin_template = NTW_PLUGIN_DIR . 'templates/factoring-calculator.php';
+            if (file_exists($plugin_template)) {
+                return $plugin_template;
+            }
+        }
+
+        // Factorial result pages: /what-is-X-factorial/
+        $factorial_id = $wp_query->get('factorial_id');
+        if (!empty($factorial_id)) {
+            $plugin_template = NTW_PLUGIN_DIR . 'templates/what-is-factorial.php';
             if (file_exists($plugin_template)) {
                 return $plugin_template;
             }

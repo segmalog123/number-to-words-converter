@@ -12,11 +12,19 @@ jQuery(document).ready(function ($) {
     });
 
     $('.convert-button').on('click', function () {
+        var dataConvert = $(this).attr('data-convert');
+        if (dataConvert === 'factorial' || dataConvert === 'factoring') {
+            return; // Handled by the page-specific template JS
+        }
         process_number();
     });
 
     $('.convert-input').keydown(function (e) {
         if (e.keyCode == 13) {
+            var dataConvert = $('.convert-button').attr('data-convert');
+            if (dataConvert === 'factorial' || dataConvert === 'factoring') {
+                return; // Handled by the page-specific template JS
+            }
             process_number();
         }
     });

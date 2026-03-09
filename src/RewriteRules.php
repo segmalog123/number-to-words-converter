@@ -47,6 +47,27 @@ class RewriteRules
             'index.php?ntw_page=numbers-in-french',
             'top'
         );
+
+        // Factorial calculator landing page.
+        add_rewrite_rule(
+            '^factorial-calculator/?$',
+            'index.php?ntw_page=factorial-calculator',
+            'top'
+        );
+
+        // Factoring calculator landing page.
+        add_rewrite_rule(
+            '^factoring-calculator/?$',
+            'index.php?ntw_page=factoring-calculator',
+            'top'
+        );
+
+        // Dynamic factorial result pages: /what-is-X-factorial/
+        add_rewrite_rule(
+            '^what-is-([0-9]+)-factorial/?$',
+            'index.php?factorial_id=$matches[1]',
+            'top'
+        );
     }
 
     /**
@@ -57,7 +78,8 @@ class RewriteRules
     public function registerQueryVars($vars)
     {
         $vars[] = 'number_id';
-        $vars[] = 'ntw_page'; // used for /numbers-in-french/
+        $vars[] = 'ntw_page'; // used for /numbers-in-french/ and /factorial-calculator/
+        $vars[] = 'factorial_id'; // used for /what-is-X-factorial/
         return $vars;
     }
 

@@ -43,6 +43,9 @@ class AssetManager
         );
         // Detect language context for the search bar
         $is_french_page = get_query_var('ntw_page') === 'numbers-in-french'
+            || get_query_var('ntw_page') === 'factorial-calculator'
+            || get_query_var('ntw_page') === 'factoring-calculator'
+            || get_query_var('factorial_id') !== ''
             || strpos($_SERVER['REQUEST_URI'] ?? '', '/how-to-say-') !== false;
 
         wp_localize_script(
@@ -68,7 +71,11 @@ class AssetManager
 
         // Result page styles (on conversion result pages OR English landing page)
         // Reuse the $is_english_page check from above (partial match) or direct check
-        $should_load_css = get_query_var('number_id') !== '' || get_query_var('ntw_page') === 'numbers-in-french';
+        $should_load_css = get_query_var('number_id') !== ''
+            || get_query_var('ntw_page') === 'numbers-in-french'
+            || get_query_var('ntw_page') === 'factorial-calculator'
+            || get_query_var('ntw_page') === 'factoring-calculator'
+            || get_query_var('factorial_id') !== '';
 
         if ($should_load_css) {
             wp_enqueue_style(

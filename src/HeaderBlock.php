@@ -51,7 +51,15 @@ class HeaderBlock
         global $wp_query;
         $number_to_convert = $wp_query->get('number_id');
         $ntw_page = $wp_query->get('ntw_page');
-        if (empty($number_to_convert) && !is_front_page() && $ntw_page !== 'numbers-in-french') {
+        $factorial_id = $wp_query->get('factorial_id');
+        if (
+            empty($number_to_convert) && !is_front_page() && $ntw_page !== 'numbers-in-french'
+            && $ntw_page !== 'factorial-calculator' && empty($factorial_id)
+        ) {
+            return;
+        }
+        // Also skip for out-of-bounds factorial numbers (> 10000) — let the theme 404 render clean
+        if (!empty($factorial_id) && (int) $factorial_id > 10000) {
             return;
         }
         $this->renderBeforeBlock();
@@ -65,6 +73,12 @@ class HeaderBlock
     {
         global $wp_query, $wp;
 
+        // Suppress entirely for out-of-bounds factorial pages (> 10000) — let the 404 render clean
+        $factorial_id = $wp_query->get('factorial_id');
+        if (!empty($factorial_id) && (int) $factorial_id > 10000) {
+            return;
+        }
+
         $number_to_convert = $wp_query->get('number_id');
         if (!isset($number_to_convert) || $number_to_convert === '') {
             $number_to_convert = '';
@@ -72,9 +86,15 @@ class HeaderBlock
 
         $current_url = home_url(add_query_arg([], $wp->request ?? ''));
         $ntw_page = $wp_query->get('ntw_page');
-        $convert_to = 'en'; // Tool 1 (en) is default.
+        $is_factorial = !empty($factorial_id);
+        $is_factoring = ($ntw_page === 'factoring-calculator');
+        $convert_to = 'en';
         if (strpos($current_url, '/how-to-say-') !== false) {
-            $convert_to = 'fr'; // Tool 2 (fr) context.
+            $convert_to = 'fr';
+        } elseif ($is_factorial || $ntw_page === 'factorial-calculator') {
+            $convert_to = 'factorial';
+        } elseif ($is_factoring) {
+            $convert_to = 'factoring';
         }
         ?>
         <div class="container cat-box-content before_html_custom_header_block">
@@ -91,6 +111,20 @@ class HeaderBlock
                             echo esc_html(ConverterHelper::convert($number_to_convert, 'h2'));
                         } elseif ($ntw_page === 'numbers-in-french') {
                             echo 'learn how to count in the French language with numbers 1-100';
+                        } elseif ($ntw_page === 'factorial-calculator' || $is_factorial) {
+                            if ($is_factorial) {
+                                $pretitles = [
+                                    'Math solver for ' . $factorial_id . ' factorial',
+                                    'Calculate the exact value of ' . $factorial_id . '!',
+                                    'Find the factorial of ' . $factorial_id . ' instantly',
+                                    'Learn how to calculate ' . $factorial_id . ' factorial',
+                                ];
+                                echo esc_html($pretitles[(int) $factorial_id % 4]);
+                            } else {
+                                echo 'Calculate the factorial (n!) of any number instantly';
+                            }
+                        } elseif ($is_factoring) {
+                            echo 'Calculate the factors of any number or find the GCF instantly';
                         } else {
                             ?>
                             <?php if (!empty($number_to_convert)): ?>
@@ -104,11 +138,34 @@ class HeaderBlock
                     </span>
                 </p>
                 <p class="convert-block">
-                    <input min="0" step="any" class="convert-input" type="text" name="tolettre" required=""
-                        title="Enter the number to convert here" value="<?php echo esc_attr($number_to_convert); ?>"
-                        placeholder="Enter the number to convert here" autocomplete="off">
+                    <input min="0" step="any" <?php if ($is_factorial || $ntw_page === 'factorial-calculator'): ?>max="10000"
+                            inputmode="numeric" <?php endif; ?> class="convert-input" type="text" name="tolettre" required="" title="<?php
+                               if ($is_factorial || $ntw_page === 'factorial-calculator')
+                                   echo 'Enter a positive integer (e.g., 5)';
+                               elseif ($is_factoring)
+                                   echo 'Enter one number (e.g., 24) or two numbers (e.g., 12, 16)';
+                               else
+                                   echo 'Enter the number to convert here';
+                               ?>"
+                        value="<?php echo esc_attr($number_to_convert ?: ($is_factorial ? (string) $factorial_id : '')); ?>"
+                        placeholder="<?php
+                        if ($is_factorial || $ntw_page === 'factorial-calculator')
+                            echo 'Enter a positive integer (e.g., 5)';
+                        elseif ($is_factoring)
+                            echo 'Enter one number (e.g., 24) or two numbers (e.g., 12, 16)';
+                        else
+                            echo 'Enter the number to convert here';
+                        ?>" autocomplete="off">
                     <button class="convert-button" data-convert="<?php echo esc_attr($convert_to); ?>" type="button"
-                        name="submitted"><i class="fa fa-refresh"></i> CONVERT</button>
+                        name="submitted"><i class="fa fa-refresh"></i>
+                        <?php
+                        if ($is_factorial || $ntw_page === 'factorial-calculator')
+                            echo 'CALCULATE';
+                        elseif ($is_factoring)
+                            echo 'FACTOR';
+                        else
+                            echo 'CONVERT';
+                        ?></button>
                 </p>
                 <p style="text-align: center;text-align: center;color: red;padding: 5px;">
                     <span class="error-input"></span>
@@ -125,6 +182,12 @@ class HeaderBlock
     {
         global $wp_query;
 
+        // Suppress for out-of-bounds factorial pages (> 10000)
+        $factorial_id_check = $wp_query->get('factorial_id');
+        if (!empty($factorial_id_check) && (int) $factorial_id_check > 10000) {
+            return;
+        }
+
         $number_to_convert = $wp_query->get('number_id');
         if (!isset($number_to_convert) || $number_to_convert === '') {
             $number_to_convert = '';
@@ -136,13 +199,30 @@ class HeaderBlock
                     <?php
                     $number_to_convert = $wp_query->get('number_id');
                     $ntw_page_after = $wp_query->get('ntw_page');
-                    if (isset($number_to_convert) && $number_to_convert !== '') {
+                    $factorial_id_after = $wp_query->get('factorial_id');
+                    if (!empty($factorial_id_after)) {
+                        $h1s = [
+                            'What is ' . $factorial_id_after . ' Factorial? (' . $factorial_id_after . '!)',
+                            'The Exact Value of ' . $factorial_id_after . ' Factorial',
+                            'How to Calculate the Factorial of ' . $factorial_id_after,
+                            $factorial_id_after . ' Factorial: Formula and Step-by-Step Result',
+                        ];
+                        echo '<h1>' . esc_html($h1s[(int) $factorial_id_after % 4]) . '</h1>';
+                    } elseif (isset($number_to_convert) && $number_to_convert !== '') {
                         ?>
                         <h1><?php echo esc_html(ConverterHelper::convert($number_to_convert, 'h1')); ?></h1>
                         <?php
                     } elseif ($ntw_page_after === 'numbers-in-french') {
                         ?>
                         <h1>Convert English Numbers (1-100 and Beyond) to French Words Easily</h1>
+                        <?php
+                    } elseif ($ntw_page_after === 'factorial-calculator') {
+                        ?>
+                        <h1>N Factorial Calculator: Calculate n! &amp; Learn the Formula</h1>
+                        <?php
+                    } elseif ($ntw_page_after === 'factoring-calculator') {
+                        ?>
+                        <h1>Factoring Calculator: Factor Completely with Steps</h1>
                         <?php
                     } elseif (is_home() || is_front_page()) {
                         ?>
