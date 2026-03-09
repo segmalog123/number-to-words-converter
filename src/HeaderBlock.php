@@ -58,8 +58,12 @@ class HeaderBlock
         ) {
             return;
         }
-        // Also skip for out-of-bounds factorial numbers (> 10000) — let the theme 404 render clean
+        // Also skip for out-of-bounds factorial numbers (> 10000) or factor numbers (> 1000000) — let the theme 404 render clean
         if (!empty($factorial_id) && (int) $factorial_id > 10000) {
+            return;
+        }
+        $factor_id = $wp_query->get('factor_id');
+        if (!empty($factor_id) && ((int) $factor_id < 1 || (int) $factor_id > 1000000)) {
             return;
         }
         $this->renderBeforeBlock();
@@ -73,9 +77,13 @@ class HeaderBlock
     {
         global $wp_query, $wp;
 
-        // Suppress entirely for out-of-bounds factorial pages (> 10000) — let the 404 render clean
+        // Suppress entirely for out-of-bounds pages — let the 404 render clean
         $factorial_id = $wp_query->get('factorial_id');
         if (!empty($factorial_id) && (int) $factorial_id > 10000) {
+            return;
+        }
+        $factor_id = $wp_query->get('factor_id');
+        if (!empty($factor_id) && ((int) $factor_id < 1 || (int) $factor_id > 1000000)) {
             return;
         }
 
