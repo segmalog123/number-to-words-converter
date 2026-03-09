@@ -33,16 +33,27 @@ class TemplateLoader
         $ntw_page = $wp_query->get('ntw_page');
 
         $factor_id_raw = $wp_query->get('factor_id');
-        $factor_id_valid = !empty($factor_id_raw)
-            && (int) $factor_id_raw >= 1
-            && (int) $factor_id_raw <= 1000000;
+        $factorial_id_raw = $wp_query->get('factorial_id');
+
+        // Check explicit 404 conditions (out-of-range numbers)
+        if (!empty($factor_id_raw) && ((int) $factor_id_raw < 1 || (int) $factor_id_raw > 1000000)) {
+            $wp_query->set_404();
+            status_header(404);
+            return;
+        }
+
+        if (!empty($factorial_id_raw) && ((int) $factorial_id_raw < 0 || (int) $factorial_id_raw > 10000)) {
+            $wp_query->set_404();
+            status_header(404);
+            return;
+        }
 
         if (
             !empty($number_to_convert) || $ntw_page === 'numbers-in-french'
             || $ntw_page === 'factorial-calculator'
             || $ntw_page === 'factoring-calculator'
-            || !empty($wp_query->get('factorial_id'))
-            || $factor_id_valid
+            || !empty($factorial_id_raw)
+            || !empty($factor_id_raw)
         ) {
             $wp_query->is_404 = false;
             $wp_query->is_page = true;
@@ -105,7 +116,8 @@ class TemplateLoader
 
         $number_to_convert = $wp_query->get('number_id');
 
-        if (!isset($number_to_convert) || $number_to_convert === '') {
+        // Check if number_id is genuinely empty (meaning it's not a /how-do-you-spell/ page)
+        if (empty($number_to_convert)) {
             return $template;
         }
 
