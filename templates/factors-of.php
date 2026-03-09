@@ -11,15 +11,8 @@ if (!defined('ABSPATH'))
 /* ─── 1. Get & sanitise X ─────────────────────────────────────────────────── */
 global $wp_query;
 $x = intval($wp_query->get('factor_id'));
-
-// Out-of-range guard → 404
-if ($x < 1 || $x > 1000000) {
-    global $wp_query;
-    $wp_query->set_404();
-    status_header(404);
-    get_template_part(404);
-    exit;
-}
+// Note: out-of-range (< 1 or > 1,000,000) is handled by TemplateLoader
+// which will not load this template, letting WordPress show its default 404.
 
 /* ─── 2. Computation helpers ──────────────────────────────────────────────── */
 
@@ -790,6 +783,11 @@ get_header();
 
             /* Rule 1 — single integer → factors */
             if (parts.length === 1 && /^\d+$/.test(parts[0])) {
+                var n = parseInt(parts[0], 10);
+                if (n < 1 || n > 1000000) {
+                    if (err) err.textContent = '\u26a0\ufe0f Our factoring calculator supports numbers from 1 to 1,000,000.';
+                    return;
+                }
                 window.location.href = BASE + 'factors-of-' + parts[0] + '/';
                 return;
             }

@@ -32,12 +32,17 @@ class TemplateLoader
         $number_to_convert = $wp_query->get('number_id');
         $ntw_page = $wp_query->get('ntw_page');
 
+        $factor_id_raw = $wp_query->get('factor_id');
+        $factor_id_valid = !empty($factor_id_raw)
+            && (int) $factor_id_raw >= 1
+            && (int) $factor_id_raw <= 1000000;
+
         if (
             !empty($number_to_convert) || $ntw_page === 'numbers-in-french'
             || $ntw_page === 'factorial-calculator'
             || $ntw_page === 'factoring-calculator'
             || !empty($wp_query->get('factorial_id'))
-            || !empty($wp_query->get('factor_id'))
+            || $factor_id_valid
         ) {
             $wp_query->is_404 = false;
             $wp_query->is_page = true;
@@ -89,9 +94,9 @@ class TemplateLoader
             }
         }
 
-        // Factor result pages: /factors-of-X/
+        // Factor result pages: /factors-of-X/ (only for 1 – 1,000,000)
         $factor_id = $wp_query->get('factor_id');
-        if (!empty($factor_id)) {
+        if (!empty($factor_id) && (int) $factor_id >= 1 && (int) $factor_id <= 1000000) {
             $plugin_template = NTW_PLUGIN_DIR . 'templates/factors-of.php';
             if (file_exists($plugin_template)) {
                 return $plugin_template;

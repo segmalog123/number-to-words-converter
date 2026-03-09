@@ -335,7 +335,8 @@ get_header();
                 factor decomposition calculator</strong>, simply enter your number. The system will act as a
             <strong>prime
                 number factor calculator</strong>, breaking down your input into its absolute base primes
-            (e.g., 24 = 2³ &times; 3). It will also list every single divisible factor for that number.</p>
+            (e.g., 24 = 2³ &times; 3). It will also list every single divisible factor for that number.
+        </p>
 
         <h3 class="ntw-fg-h3">Greatest Common Factor (GCF)</h3>
 
@@ -570,6 +571,11 @@ get_header();
 
             /* ── Rule 1 — single integer → factors ── */
             if (parts.length === 1 && /^\d+$/.test(parts[0])) {
+                var n = parseInt(parts[0], 10);
+                if (n < 1 || n > 1000000) {
+                    if (err) err.textContent = '\u26a0\ufe0f Our factoring calculator supports numbers from 1 to 1,000,000.';
+                    return;
+                }
                 window.location.href = BASE + 'factors-of-' + parts[0] + '/';
                 return;
             }
