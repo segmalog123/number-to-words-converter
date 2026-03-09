@@ -88,12 +88,14 @@ class HeaderBlock
         $ntw_page = $wp_query->get('ntw_page');
         $is_factorial = !empty($factorial_id);
         $is_factoring = ($ntw_page === 'factoring-calculator');
+        $factor_id = $wp_query->get('factor_id');
+        $is_factoring_result = !empty($factor_id);
         $convert_to = 'en';
         if (strpos($current_url, '/how-to-say-') !== false) {
             $convert_to = 'fr';
         } elseif ($is_factorial || $ntw_page === 'factorial-calculator') {
             $convert_to = 'factorial';
-        } elseif ($is_factoring) {
+        } elseif ($is_factoring || $is_factoring_result) {
             $convert_to = 'factoring';
         }
         ?>
@@ -125,6 +127,14 @@ class HeaderBlock
                             }
                         } elseif ($is_factoring) {
                             echo 'Calculate the factors of any number or find the GCF instantly';
+                        } elseif ($is_factoring_result) {
+                            $pretitles_fo = [
+                                'Math solver for the factors of ' . $factor_id,
+                                'Calculate the exact factors of ' . $factor_id,
+                                'Find all factors and prime factors of ' . $factor_id,
+                                'Learn how to factor ' . $factor_id . ' completely',
+                            ];
+                            echo esc_html($pretitles_fo[(int) $factor_id % 4]);
                         } else {
                             ?>
                             <?php if (!empty($number_to_convert)): ?>
@@ -142,16 +152,16 @@ class HeaderBlock
                             inputmode="numeric" <?php endif; ?> class="convert-input" type="text" name="tolettre" required="" title="<?php
                                if ($is_factorial || $ntw_page === 'factorial-calculator')
                                    echo 'Enter a positive integer (e.g., 5)';
-                               elseif ($is_factoring)
+                               elseif ($is_factoring || $is_factoring_result)
                                    echo 'Enter one number (e.g., 24) or two numbers (e.g., 12, 16)';
                                else
                                    echo 'Enter the number to convert here';
                                ?>"
-                        value="<?php echo esc_attr($number_to_convert ?: ($is_factorial ? (string) $factorial_id : '')); ?>"
+                        value="<?php echo esc_attr($number_to_convert ?: ($is_factorial ? (string) $factorial_id : ($is_factoring_result ? (string) $factor_id : ''))); ?>"
                         placeholder="<?php
                         if ($is_factorial || $ntw_page === 'factorial-calculator')
                             echo 'Enter a positive integer (e.g., 5)';
-                        elseif ($is_factoring)
+                        elseif ($is_factoring || $is_factoring_result)
                             echo 'Enter one number (e.g., 24) or two numbers (e.g., 12, 16)';
                         else
                             echo 'Enter the number to convert here';
@@ -161,7 +171,7 @@ class HeaderBlock
                         <?php
                         if ($is_factorial || $ntw_page === 'factorial-calculator')
                             echo 'CALCULATE';
-                        elseif ($is_factoring)
+                        elseif ($is_factoring || $is_factoring_result)
                             echo 'FACTOR';
                         else
                             echo 'CONVERT';
@@ -224,6 +234,15 @@ class HeaderBlock
                         ?>
                         <h1>Factoring Calculator: Factor Completely with Steps</h1>
                         <?php
+                    } elseif (!empty($wp_query->get('factor_id'))) {
+                        $fid = $wp_query->get('factor_id');
+                        $h1s_fo = [
+                            'What are the Factors of ' . $fid . '?',
+                            'The Exact Factors of ' . $fid,
+                            'How to Find the Factors of ' . $fid,
+                            'Factors of ' . $fid . ': Prime Factorization &amp; Pairs',
+                        ];
+                        echo '<h1>' . esc_html($h1s_fo[(int) $fid % 4]) . '</h1>';
                     } elseif (is_home() || is_front_page()) {
                         ?>
                         <p style="font-size: 1.6em; font-weight: 700; line-height: 1.3; margin: 0; color: inherit;">How to write

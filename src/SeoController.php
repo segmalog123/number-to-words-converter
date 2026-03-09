@@ -96,6 +96,20 @@ class SeoController
     }
 
     /**
+     * Get the current factor_id from the query (/factors-of-X/).
+     * @return string|false
+     */
+    private function getFactorId()
+    {
+        global $wp_query;
+        $factor_id = $wp_query->get('factor_id');
+        if (isset($factor_id) && $factor_id !== '') {
+            return $factor_id;
+        }
+        return false;
+    }
+
+    /**
      * Filter the page title.
      *
      * @param string $title Original title.
@@ -115,6 +129,10 @@ class SeoController
         $factorial = $this->getFactorialId();
         if ($factorial !== false) {
             return 'What is ' . $factorial . ' Factorial? (' . $factorial . '!) | Exact Result & Calculation';
+        }
+        $factor = $this->getFactorId();
+        if ($factor !== false) {
+            return 'Factors of ' . $factor . ' | Prime Factorization & Factor Pairs';
         }
         $number = $this->getNumberId();
         if ($number !== false) {
@@ -143,6 +161,10 @@ class SeoController
         $factorial = $this->getFactorialId();
         if ($factorial !== false) {
             return 'Find out exactly what ' . $factorial . ' factorial (' . $factorial . '!) is. See the step-by-step calculation, trailing zeros, and permutations for the number ' . $factorial . '.';
+        }
+        $factor = $this->getFactorId();
+        if ($factor !== false) {
+            return 'Find the exact factors of ' . $factor . ', including its prime factorization, factor pairs, and a step-by-step breakdown of how to completely factor the number ' . $factor . '.';
         }
         $number = $this->getNumberId();
         if ($number !== false) {
@@ -186,6 +208,11 @@ class SeoController
         $factorial = $this->getFactorialId();
         if ($factorial !== false) {
             echo '<link rel="canonical" href="' . esc_url(home_url('/what-is-' . $factorial . '-factorial/')) . '" />' . "\n";
+            return;
+        }
+        $factor = $this->getFactorId();
+        if ($factor !== false) {
+            echo '<link rel="canonical" href="' . esc_url(home_url('/factors-of-' . $factor . '/')) . '" />' . "\n";
             return;
         }
         $number = $this->getNumberId();
@@ -272,6 +299,10 @@ class SeoController
         }
         $factorial = $this->getFactorialId();
         if ($factorial !== false) {
+            return 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
+        }
+        $factor = $this->getFactorId();
+        if ($factor !== false) {
             return 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
         }
         return $robots;

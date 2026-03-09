@@ -37,6 +37,7 @@ class TemplateLoader
             || $ntw_page === 'factorial-calculator'
             || $ntw_page === 'factoring-calculator'
             || !empty($wp_query->get('factorial_id'))
+            || !empty($wp_query->get('factor_id'))
         ) {
             $wp_query->is_404 = false;
             $wp_query->is_page = true;
@@ -83,6 +84,15 @@ class TemplateLoader
         $factorial_id = $wp_query->get('factorial_id');
         if (!empty($factorial_id)) {
             $plugin_template = NTW_PLUGIN_DIR . 'templates/what-is-factorial.php';
+            if (file_exists($plugin_template)) {
+                return $plugin_template;
+            }
+        }
+
+        // Factor result pages: /factors-of-X/
+        $factor_id = $wp_query->get('factor_id');
+        if (!empty($factor_id)) {
+            $plugin_template = NTW_PLUGIN_DIR . 'templates/factors-of.php';
             if (file_exists($plugin_template)) {
                 return $plugin_template;
             }

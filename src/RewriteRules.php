@@ -68,6 +68,13 @@ class RewriteRules
             'index.php?factorial_id=$matches[1]',
             'top'
         );
+
+        // Dynamic factor result pages: /factors-of-X/
+        add_rewrite_rule(
+            '^factors-of-([0-9]+)/?$',
+            'index.php?factor_id=$matches[1]',
+            'top'
+        );
     }
 
     /**
@@ -78,8 +85,9 @@ class RewriteRules
     public function registerQueryVars($vars)
     {
         $vars[] = 'number_id';
-        $vars[] = 'ntw_page'; // used for /numbers-in-french/ and /factorial-calculator/
+        $vars[] = 'ntw_page';    // used for /numbers-in-french/ and /factorial-calculator/
         $vars[] = 'factorial_id'; // used for /what-is-X-factorial/
+        $vars[] = 'factor_id';   // used for /factors-of-X/
         return $vars;
     }
 
