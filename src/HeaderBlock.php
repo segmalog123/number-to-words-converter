@@ -200,9 +200,13 @@ class HeaderBlock
     {
         global $wp_query;
 
-        // Suppress for out-of-bounds factorial pages (> 10000)
+        // Suppress for out-of-bounds pages
         $factorial_id_check = $wp_query->get('factorial_id');
         if (!empty($factorial_id_check) && (int) $factorial_id_check > 10000) {
+            return;
+        }
+        $factor_id_check = $wp_query->get('factor_id');
+        if (!empty($factor_id_check) && ((int) $factor_id_check < 1 || (int) $factor_id_check > 1000000)) {
             return;
         }
 
