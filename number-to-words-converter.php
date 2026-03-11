@@ -115,10 +115,6 @@ function ntw_init_plugin()
     $plugin = new \NumberToWordsConverter\Plugin();
     $plugin->init();
 
-    // Initialize custom sitemaps
-    $plugin_sitemap = new \NumberToWordsConverter\SitemapController();
-    $plugin_sitemap->init();
-
     // Init Widgets
     add_action('widgets_init', function () {
         if (class_exists('\NumberToWordsConverter\Widgets\ConversionWidget')) {
