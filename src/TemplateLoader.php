@@ -34,6 +34,8 @@ class TemplateLoader
 
         $factor_id_raw = $wp_query->get('factor_id');
         $factorial_id_raw = $wp_query->get('factorial_id');
+        $gcf_y_raw = $wp_query->get('gcf_y');
+        $gcf_x_raw = $wp_query->get('gcf_x');
 
         // Check explicit 404 conditions (out-of-range numbers)
         if (!empty($factor_id_raw) && ((int) $factor_id_raw < 1 || (int) $factor_id_raw > 1000000)) {
@@ -48,12 +50,32 @@ class TemplateLoader
             return;
         }
 
+        if (!empty($gcf_x_raw) && !empty($gcf_y_raw)) {
+            $gcf_x = (int) $gcf_x_raw;
+            $gcf_y = (int) $gcf_y_raw;
+
+            // 404 Guard: If either number is > 100 or < 1, throw a 404
+            if ($gcf_x < 1 || $gcf_x > 100 || $gcf_y < 1 || $gcf_y > 100) {
+                $wp_query->set_404();
+                status_header(404);
+                return;
+            }
+
+            // Alphabetical/Numerical URL Lock (Canonicalization):
+            // If the first number is larger than the second, 301 redirect to sorted URL
+            if ($gcf_x > $gcf_y) {
+                wp_redirect(home_url("/gcf-of-{$gcf_y}-and-{$gcf_x}/"), 301);
+                exit;
+            }
+        }
+
         if (
             !empty($number_to_convert) || $ntw_page === 'numbers-in-french'
             || $ntw_page === 'factorial-calculator'
             || $ntw_page === 'factoring-calculator'
             || !empty($factorial_id_raw)
             || !empty($factor_id_raw)
+            || (!empty($gcf_x_raw) && !empty($gcf_y_raw))
         ) {
             $wp_query->is_404 = false;
             $wp_query->is_page = true;
@@ -109,6 +131,16 @@ class TemplateLoader
         $factor_id = $wp_query->get('factor_id');
         if (!empty($factor_id) && (int) $factor_id >= 1 && (int) $factor_id <= 1000000) {
             $plugin_template = NTW_PLUGIN_DIR . 'templates/factors-of.php';
+            if (file_exists($plugin_template)) {
+                return $plugin_template;
+            }
+        }
+
+        // GCF result pages: /gcf-of-X-and-Y/ (only for 1 - 100)
+        $gcf_x = $wp_query->get('gcf_x');
+        $gcf_y = $wp_query->get('gcf_y');
+        if (!empty($gcf_x) && !empty($gcf_y) && (int) $gcf_x >= 1 && (int) $gcf_x <= 100 && (int) $gcf_y >= 1 && (int) $gcf_y <= 100) {
+            $plugin_template = NTW_PLUGIN_DIR . 'templates/gcf-of.php';
             if (file_exists($plugin_template)) {
                 return $plugin_template;
             }

@@ -287,10 +287,8 @@ get_header();
         <div class="ntw-fg-algebra-notice">
             <strong>💡 Looking for advanced algebra?</strong> If you need to factor equations, trinomials, or
             complex expressions, use our dedicated math solvers here:<br>
-            ➔ <a href="<?php echo esc_url(site_url('/polynomial-factoring-calculator/')); ?>">Polynomial Factoring
-                Calculator</a> &nbsp;&nbsp;
-            ➔ <a href="<?php echo esc_url(site_url('/quadratic-equation-factoring-calculator/')); ?>">Quadratic Equation
-                Factoring Calculator</a>
+            ➔ Polynomial Factoring Calculator &nbsp;&nbsp;
+            ➔ Quadratic Equation Factoring Calculator
         </div>
 
 
@@ -355,9 +353,8 @@ get_header();
                 Tool)</em></h3>
 
         <p>Algebraic expressions require grouping and expanding. If you are dealing with algebra, navigate to our
-            highly advanced <a
-                href="<?php echo esc_url(site_url('/polynomial-factoring-calculator/')); ?>"><strong>calculator
-                    factoring polynomials</strong></a>. It will easily factor the polynomial completely calculator
+            highly advanced <strong>calculator
+                factoring polynomials</strong>. It will easily factor the polynomial completely calculator
             style,
             breaking down complex terms step-by-step.</p>
 
@@ -365,8 +362,8 @@ get_header();
 
         <p>Quadratics are the most searched factoring problems in algebra. For equations in the format
             <em>ax² + bx + c</em>, visit our dedicated
-            <a href="<?php echo esc_url(site_url('/quadratic-equation-factoring-calculator/')); ?>"><strong>factoring
-                    quadratic equations calculator</strong></a>. It supports all algebraic variations, acting as your:
+            <strong>factoring quadratic equations calculator</strong>. It supports all algebraic variations, acting as
+            your:
         </p>
 
         <ul class="ntw-fg-list">
@@ -545,11 +542,7 @@ get_header();
             if (/[a-zA-Z]/.test(raw) || /\^/.test(raw)) {
                 if (err) {
                     err.style.color = '#555';
-                    var quadUrl = '<?php echo esc_js(site_url('/quadratic-equation-factoring-calculator/')); ?>';
-                    var polyUrl = '<?php echo esc_js(site_url('/polynomial-factoring-calculator/')); ?>';
-                    err.innerHTML = '\u26a0\ufe0f Looking to factor an equation? Please use our dedicated '
-                        + '<a href="' + quadUrl + '">Quadratic Equation Factoring Calculator</a>'
-                        + ' or <a href="' + polyUrl + '">Polynomial Factoring Calculator</a>.';
+                    err.innerHTML = '\u26a0\ufe0f Looking to factor an equation? Please use our dedicated Quadratic Equation Factoring Calculator or Polynomial Factoring Calculator.';
                 }
                 return;
             }
@@ -565,7 +558,20 @@ get_header();
 
             /* ── Rule 2 — two integers → GCF ── */
             if (parts.length === 2 && /^\d+$/.test(parts[0]) && /^\d+$/.test(parts[1])) {
-                window.location.href = BASE + 'gcf-of-' + parts[0] + '-and-' + parts[1] + '/';
+                var p1 = parseInt(parts[0], 10);
+                var p2 = parseInt(parts[1], 10);
+
+                if (p1 > 100 || p2 > 100) {
+                    if (err) {
+                        err.style.color = 'red';
+                        err.textContent = 'Calculations of GCF are limited to numbers between 1 and 100.';
+                    }
+                    return;
+                }
+
+                var x = Math.min(p1, p2);
+                var y = Math.max(p1, p2);
+                window.location.href = BASE + 'gcf-of-' + x + '-and-' + y + '/';
                 return;
             }
 

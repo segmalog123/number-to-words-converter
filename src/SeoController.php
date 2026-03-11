@@ -110,6 +110,25 @@ class SeoController
     }
 
     /**
+     * Get the GCF X and Y numbers if present.
+     *
+     * @return array|false Returns ['x' => x, 'y' => y] or false
+     */
+    private function getGcfVars()
+    {
+        global $wp_query;
+        $gcf_x = $wp_query->get('gcf_x');
+        $gcf_y = $wp_query->get('gcf_y');
+        if (!empty($gcf_x) && !empty($gcf_y)) {
+            return [
+                'x' => (int) $gcf_x,
+                'y' => (int) $gcf_y
+            ];
+        }
+        return false;
+    }
+
+    /**
      * Filter the page title.
      *
      * @param string $title Original title.
@@ -133,6 +152,10 @@ class SeoController
         $factor = $this->getFactorId();
         if ($factor !== false) {
             return 'Factors of ' . $factor . ' | Prime Factorization & Factor Pairs';
+        }
+        $gcf = $this->getGcfVars();
+        if ($gcf !== false) {
+            return 'GCF of ' . $gcf['x'] . ' and ' . $gcf['y'] . ' | Greatest Common Factor Calculator';
         }
         $number = $this->getNumberId();
         if ($number !== false) {
@@ -165,6 +188,10 @@ class SeoController
         $factor = $this->getFactorId();
         if ($factor !== false) {
             return 'Find the exact factors of ' . $factor . ', including its prime factorization, factor pairs, and a step-by-step breakdown of how to completely factor the number ' . $factor . '.';
+        }
+        $gcf = $this->getGcfVars();
+        if ($gcf !== false) {
+            return 'Find the GCF of ' . $gcf['x'] . ' and ' . $gcf['y'] . ' instantly. See the step-by-step factoring methods, common divisors, and the least common multiple (LCM) of ' . $gcf['x'] . ' and ' . $gcf['y'] . '.';
         }
         $number = $this->getNumberId();
         if ($number !== false) {
@@ -213,6 +240,12 @@ class SeoController
         $factor = $this->getFactorId();
         if ($factor !== false) {
             echo '<link rel="canonical" href="' . esc_url(home_url('/factors-of-' . $factor . '/')) . '" />' . "\n";
+            return;
+        }
+        $gcf = $this->getGcfVars();
+        if ($gcf !== false) {
+            // Because of the numerical URL lock in TemplateLoader, x is always smaller than y by the time it renders
+            echo '<link rel="canonical" href="' . esc_url(home_url('/gcf-of-' . $gcf['x'] . '-and-' . $gcf['y'] . '/')) . '" />' . "\n";
             return;
         }
         $number = $this->getNumberId();
@@ -299,10 +332,39 @@ class SeoController
         }
         $factorial = $this->getFactorialId();
         if ($factorial !== false) {
-            return 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
+            $x = intval($factorial);
+            // IF X <= 200 : index
+            // IF X > 200 AND X % 50 == 0 : index
+            // Else : noindex, follow
+            if ($x <= 200 || ($x > 200 && $x % 50 === 0)) {
+                return 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
+            } else {
+                return 'noindex, follow';
+            }
         }
         $factor = $this->getFactorId();
         if ($factor !== false) {
+            $x = intval($factor);
+            /*
+            IF X <= 1000 : index
+            (X >= 1900 && X <= 2100): index
+            (X > 1000 && X <= 10000 && X % 100 == 0): index
+            (X > 10000 && X % 500 == 0) : index
+            Else (rest of numbers) : noindex, follow
+            */
+            if (
+                $x <= 1000 ||
+                ($x >= 1900 && $x <= 2100) ||
+                ($x > 1000 && $x <= 10000 && $x % 100 === 0) ||
+                ($x > 10000 && $x % 500 === 0)
+            ) {
+                return 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
+            } else {
+                return 'noindex, follow';
+            }
+        }
+        $gcf = $this->getGcfVars();
+        if ($gcf !== false) {
             return 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
         }
         return $robots;

@@ -47,6 +47,7 @@ class AssetManager
             || get_query_var('ntw_page') === 'factoring-calculator'
             || get_query_var('factorial_id') !== ''
             || get_query_var('factor_id') !== ''
+            || (get_query_var('gcf_x') !== '' && get_query_var('gcf_y') !== '')
             || strpos($_SERVER['REQUEST_URI'] ?? '', '/how-to-say-') !== false;
 
         wp_localize_script(
@@ -77,7 +78,8 @@ class AssetManager
             || get_query_var('ntw_page') === 'factorial-calculator'
             || get_query_var('ntw_page') === 'factoring-calculator'
             || get_query_var('factorial_id') !== ''
-            || get_query_var('factor_id') !== '';
+            || get_query_var('factor_id') !== ''
+            || (get_query_var('gcf_x') !== '' && get_query_var('gcf_y') !== '');
 
         if ($should_load_css) {
             wp_enqueue_style(

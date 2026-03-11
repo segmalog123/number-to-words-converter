@@ -93,15 +93,15 @@ if ($x > 10000) {
     exit;
 }
 
-$EXACT_CAP       = ($x <= 1000);   // Show exact integer for n ≤ 1000
+$EXACT_CAP = ($x <= 1000);   // Show exact integer for n ≤ 1000
 $SCIENTIFIC_ONLY = !$EXACT_CAP;    // Stirling approximation only for 1001–10000
 
-$exact_str      = $EXACT_CAP ? ntw_factorial_exact($x) : '';
-$digit_count    = $EXACT_CAP ? strlen($exact_str) : null;
+$exact_str = $EXACT_CAP ? ntw_factorial_exact($x) : '';
+$digit_count = $EXACT_CAP ? strlen($exact_str) : null;
 $trailing_zeros = ntw_trailing_zeros($x);
-$sci            = $EXACT_CAP
-                    ? (strlen($exact_str) > 1 ? ntw_sci_notation($exact_str) : '')
-                    : ntw_stirling_sci($x);
+$sci = $EXACT_CAP
+    ? (strlen($exact_str) > 1 ? ntw_sci_notation($exact_str) : '')
+    : ntw_stirling_sci($x);
 
 // In running text (permutations, FAQ): sci notation for X > 20 to avoid spamming huge digit strings
 $display_in_text = ($x <= 20 && $exact_str !== '') ? $exact_str : ntw_stirling_sci($x);
@@ -113,10 +113,10 @@ if ($x == 0 || $x == 1) {
     $parts = [];
     for ($i = $x; $i >= 1; $i--)
         $parts[] = $i;
-    $eq_result     = ($x <= 20 && $exact_str) ? $exact_str : ntw_stirling_sci($x);
+    $eq_result = ($x <= 20 && $exact_str) ? $exact_str : ntw_stirling_sci($x);
     $equation_line = "{$x}! = " . implode(' &times; ', $parts) . " = " . $eq_result;
 } else {
-    $eq_result     = ($x <= 20 && $exact_str) ? $exact_str : ntw_stirling_sci($x);
+    $eq_result = ($x <= 20 && $exact_str) ? $exact_str : ntw_stirling_sci($x);
     $equation_line = "{$x}! = {$x} &times; " . ($x - 1) . " &times; &hellip; &times; 3 &times; 2 &times; 1 = " . $eq_result;
 }
 
@@ -143,36 +143,56 @@ if ($x == 3) {
 
 /* Nearby factorial links */
 $nearby = [];
-$anchors_minus = [
+$anchors = [
     'What is %d factorial',
     'Value of %d factorial',
     'Factorial of %d',
     '%d factorial',
 ];
-$anchors_plus = [
-    'What is %d factorial',
-    'Value of %d factorial',
-    'Factorial of %d',
-    '%d factorial',
-];
-$link_idx = 0;
-for ($i = $x - 4; $i <= $x - 1; $i++) {
-    if ($i >= 0) {
-        $nearby[] = ['n' => $i, 'text' => sprintf($anchors_minus[$link_idx % 4], $i)];
+
+if ($x <= 200) {
+    // Core Group: increment by 1
+    $link_idx = 0;
+    for ($i = $x - 4; $i <= $x - 1; $i++) {
+        if ($i >= 0) {
+            $nearby[] = ['n' => $i, 'text' => sprintf($anchors[$link_idx % 4], $i)];
+        }
+        $link_idx++;
     }
-    $link_idx++;
-}
-for ($i = $x + 1; $i <= $x + 4; $i++) {
-    if ($i <= 10000) { // never link beyond our hard cap
-        $nearby[] = ['n' => $i, 'text' => sprintf($anchors_plus[$link_idx % 4], $i)];
+    for ($i = $x + 1; $i <= $x + 4; $i++) {
+        if ($i <= 10000) { // never link beyond our hard cap
+            $nearby[] = ['n' => $i, 'text' => sprintf($anchors[$link_idx % 4], $i)];
+        }
+        $link_idx++;
     }
-    $link_idx++;
+} else {
+    // Milestone Group: jump by 50 to match index strategy
+    $link_idx = 0;
+
+    // Nearest multiple of 50 strictly below x
+    // E.g., if x=500, closest_below=450. If x=525, closest_below=500.
+    $closest_below = floor(($x - 1) / 50) * 50;
+    for ($i = $closest_below - 150; $i <= $closest_below; $i += 50) {
+        if ($i >= 0) {
+            $nearby[] = ['n' => $i, 'text' => sprintf($anchors[$link_idx % 4], $i)];
+        }
+        $link_idx++;
+    }
+
+    // Nearest multiple of 50 strictly above x
+    $closest_above = ceil(($x + 1) / 50) * 50;
+    for ($i = $closest_above; $i <= $closest_above + 150; $i += 50) {
+        if ($i <= 10000) {
+            $nearby[] = ['n' => $i, 'text' => sprintf($anchors[$link_idx % 4], $i)];
+        }
+        $link_idx++;
+    }
 }
 
 /* FAQ schema data */
 $faq_exact_display = $exact_str ?: "a number with {$digit_count} digits";
 // For FAQ text, show sci notation for X > 20 to keep text concise
-$faq_result_text   = ($x <= 20 && $exact_str) ? $exact_str : 'approximately ' . strip_tags(ntw_stirling_sci($x));
+$faq_result_text = ($x <= 20 && $exact_str) ? $exact_str : 'approximately ' . strip_tags(ntw_stirling_sci($x));
 $faq_data = [
     [
         'q' => "How do you find the factorial of {$x}?",
@@ -246,7 +266,8 @@ get_header();
         padding: 14px;
         background: #f5faf7;
         border-radius: 6px;
-        overflow-x: auto;    /* allow horizontal scroll if formula is very long */
+        overflow-x: auto;
+        /* allow horizontal scroll if formula is very long */
         max-width: 100%;
     }
 

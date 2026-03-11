@@ -75,6 +75,13 @@ class RewriteRules
             'index.php?factor_id=$matches[1]',
             'top'
         );
+
+        // Dynamic GCF result pages: /gcf-of-X-and-Y/
+        add_rewrite_rule(
+            '^gcf-of-([0-9]+)-and-([0-9]+)/?$',
+            'index.php?gcf_x=$matches[1]&gcf_y=$matches[2]',
+            'top'
+        );
     }
 
     /**
@@ -88,6 +95,8 @@ class RewriteRules
         $vars[] = 'ntw_page';    // used for /numbers-in-french/ and /factorial-calculator/
         $vars[] = 'factorial_id'; // used for /what-is-X-factorial/
         $vars[] = 'factor_id';   // used for /factors-of-X/
+        $vars[] = 'gcf_x';       // used for /gcf-of-X-and-Y/
+        $vars[] = 'gcf_y';       // used for /gcf-of-X-and-Y/
         return $vars;
     }
 

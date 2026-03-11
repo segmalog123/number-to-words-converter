@@ -152,23 +152,88 @@ $nearby_labels_after = [
     'Factor [N] completely',
 ];
 $nearby_links = [];
-for ($delta = 4; $delta >= 1; $delta--) {
-    $n = $x - $delta;
-    if ($n >= 1) {
-        $label_tpl = $nearby_labels_before[$delta - 1];
-        $label = (strpos($label_tpl, '[N]') !== false)
-            ? str_replace('[N]', $n, $label_tpl)
-            : $label_tpl . $n;
-        $nearby_links[] = ['n' => $n, 'label' => $label];
+
+if (
+    $x <= 1000 ||
+    ($x >= 1900 && $x <= 2100)
+) {
+    // Core increment by 1
+    for ($delta = 4; $delta >= 1; $delta--) {
+        $n = $x - $delta;
+        if ($n >= 1) {
+            $label_tpl = $nearby_labels_before[$delta - 1]; // using existing backwards mapping 3, 2, 1, 0
+            $label = (strpos($label_tpl, '[N]') !== false)
+                ? str_replace('[N]', $n, $label_tpl)
+                : $label_tpl . $n;
+            $nearby_links[] = ['n' => $n, 'label' => $label];
+        }
     }
-}
-for ($delta = 1; $delta <= 4; $delta++) {
-    $n = $x + $delta;
-    $label_tpl = $nearby_labels_after[$delta - 1];
-    $label = (strpos($label_tpl, '[N]') !== false)
-        ? str_replace('[N]', $n, $label_tpl)
-        : $label_tpl . $n;
-    $nearby_links[] = ['n' => $n, 'label' => $label];
+    for ($delta = 1; $delta <= 4; $delta++) {
+        $n = $x + $delta;
+        if ($n <= 1000000) {
+            $label_tpl = $nearby_labels_after[$delta - 1];
+            $label = (strpos($label_tpl, '[N]') !== false)
+                ? str_replace('[N]', $n, $label_tpl)
+                : $label_tpl . $n;
+            $nearby_links[] = ['n' => $n, 'label' => $label];
+        }
+    }
+} elseif ($x <= 10000) {
+    // Increment by 100
+    $closest_below = floor(($x - 1) / 100) * 100;
+    $closest_above = ceil(($x + 1) / 100) * 100;
+
+    $idx = 0;
+    for ($n = $closest_below - 300; $n <= $closest_below; $n += 100) {
+        if ($n >= 1) {
+            $label_tpl = $nearby_labels_before[$idx % 4];
+            $label = (strpos($label_tpl, '[N]') !== false)
+                ? str_replace('[N]', $n, $label_tpl)
+                : $label_tpl . $n;
+            $nearby_links[] = ['n' => $n, 'label' => $label];
+        }
+        $idx++;
+    }
+
+    $idx = 0;
+    for ($n = $closest_above; $n <= $closest_above + 300; $n += 100) {
+        if ($n <= 1000000) {
+            $label_tpl = $nearby_labels_after[$idx % 4];
+            $label = (strpos($label_tpl, '[N]') !== false)
+                ? str_replace('[N]', $n, $label_tpl)
+                : $label_tpl . $n;
+            $nearby_links[] = ['n' => $n, 'label' => $label];
+        }
+        $idx++;
+    }
+} else {
+    // Increment by 500
+    $closest_below = floor(($x - 1) / 500) * 500;
+    $closest_above = ceil(($x + 1) / 500) * 500;
+
+    $idx = 0;
+    for ($n = $closest_below - 1500; $n <= $closest_below; $n += 500) {
+        if ($n >= 1) {
+            $label_tpl = $nearby_labels_before[$idx % 4];
+            $label = (strpos($label_tpl, '[N]') !== false)
+                ? str_replace('[N]', $n, $label_tpl)
+                : $label_tpl . $n;
+            $nearby_links[] = ['n' => $n, 'label' => $label];
+        }
+        $idx++;
+    }
+
+    $idx = 0;
+    for ($n = $closest_above; $n <= $closest_above + 1500; $n += 500) {
+        if ($n <= 1000000) {
+            $label_tpl = $nearby_labels_after[$idx % 4];
+            $label = (strpos($label_tpl, '[N]') !== false)
+                ? str_replace('[N]', $n, $label_tpl)
+                : $label_tpl . $n;
+            $nearby_links[] = ['n' => $n, 'label' => $label];
+        }
+        $idx++;
+    }
 }
 
 /* ─── 7. Render ────────────────────────────────────────────────────────────── */
@@ -757,11 +822,7 @@ get_header();
             if (/[a-zA-Z]/.test(raw) || /\^/.test(raw)) {
                 if (err) {
                     err.style.color = '#555';
-                    var quadUrl = '<?php echo esc_js(site_url('/quadratic-equation-factoring-calculator/')); ?>';
-                    var polyUrl = '<?php echo esc_js(site_url('/polynomial-factoring-calculator/')); ?>';
-                    err.innerHTML = '\u26a0\ufe0f Looking to factor an equation? Please use our dedicated '
-                        + '<a href="' + quadUrl + '">Quadratic Equation Factoring Calculator</a>'
-                        + ' or <a href="' + polyUrl + '">Polynomial Factoring Calculator</a>.';
+                    err.innerHTML = '\u26a0\ufe0f Looking to factor an equation? Please use our dedicated Quadratic Equation Factoring Calculator or Polynomial Factoring Calculator.';
                 }
                 return;
             }
@@ -777,7 +838,20 @@ get_header();
 
             /* Rule 2 — two integers → GCF */
             if (parts.length === 2 && /^\d+$/.test(parts[0]) && /^\d+$/.test(parts[1])) {
-                window.location.href = BASE + 'gcf-of-' + parts[0] + '-and-' + parts[1] + '/';
+                var p1 = parseInt(parts[0], 10);
+                var p2 = parseInt(parts[1], 10);
+
+                if (p1 > 100 || p2 > 100) {
+                    if (err) {
+                        err.style.color = 'red';
+                        err.textContent = 'Calculations of GCF are limited to numbers between 1 and 100.';
+                    }
+                    return;
+                }
+
+                var x = Math.min(p1, p2);
+                var y = Math.max(p1, p2);
+                window.location.href = BASE + 'gcf-of-' + x + '-and-' + y + '/';
                 return;
             }
 

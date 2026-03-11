@@ -66,6 +66,15 @@ class HeaderBlock
         if (!empty($factor_id) && ((int) $factor_id < 1 || (int) $factor_id > 1000000)) {
             return;
         }
+        $gcf_x = $wp_query->get('gcf_x');
+        $gcf_y = $wp_query->get('gcf_y');
+        if (!empty($gcf_x) && !empty($gcf_y) && ($gcf_x < 1 || $gcf_x > 100 || $gcf_y < 1 || $gcf_y > 100)) {
+            return;
+        }
+        $factor_id = $wp_query->get('factor_id');
+        if (!empty($factor_id) && ((int) $factor_id < 1 || (int) $factor_id > 1000000)) {
+            return;
+        }
         $this->renderBeforeBlock();
         $this->renderAfterBlock();
     }
@@ -86,6 +95,11 @@ class HeaderBlock
         if (!empty($factor_id) && ((int) $factor_id < 1 || (int) $factor_id > 1000000)) {
             return;
         }
+        $gcf_x = $wp_query->get('gcf_x');
+        $gcf_y = $wp_query->get('gcf_y');
+        if (!empty($gcf_x) && !empty($gcf_y) && ($gcf_x < 1 || $gcf_x > 100 || $gcf_y < 1 || $gcf_y > 100)) {
+            return;
+        }
 
         $number_to_convert = $wp_query->get('number_id');
         if (!isset($number_to_convert) || $number_to_convert === '') {
@@ -99,11 +113,13 @@ class HeaderBlock
         $factor_id = $wp_query->get('factor_id');
         $is_factoring_result = !empty($factor_id);
         $convert_to = 'en';
+        $is_gcf_result = (!empty($gcf_x) && !empty($gcf_y));
+
         if (strpos($current_url, '/how-to-say-') !== false) {
             $convert_to = 'fr';
         } elseif ($is_factorial || $ntw_page === 'factorial-calculator') {
             $convert_to = 'factorial';
-        } elseif ($is_factoring || $is_factoring_result) {
+        } elseif ($is_factoring || $is_factoring_result || $is_gcf_result) {
             $convert_to = 'factoring';
         }
         ?>
@@ -143,6 +159,14 @@ class HeaderBlock
                                 'Learn how to factor ' . $factor_id . ' completely',
                             ];
                             echo esc_html($pretitles_fo[(int) $factor_id % 4]);
+                        } elseif ($is_gcf_result) {
+                            $pretitles_gcf = [
+                                'Math solver for the GCF of ' . $gcf_x . ' and ' . $gcf_y,
+                                'Calculate the greatest common factor of ' . $gcf_x . ' and ' . $gcf_y,
+                                'Find common divisors for ' . $gcf_x . ' and ' . $gcf_y,
+                                'Step-by-step GCF for ' . $gcf_x . ' and ' . $gcf_y,
+                            ];
+                            echo esc_html($pretitles_gcf[((int) $gcf_x + (int) $gcf_y) % 4]);
                         } else {
                             ?>
                             <?php if (!empty($number_to_convert)): ?>
@@ -160,16 +184,16 @@ class HeaderBlock
                             inputmode="numeric" <?php endif; ?> class="convert-input" type="text" name="tolettre" required="" title="<?php
                                if ($is_factorial || $ntw_page === 'factorial-calculator')
                                    echo 'Enter a positive integer (e.g., 5)';
-                               elseif ($is_factoring || $is_factoring_result)
+                               elseif ($is_factoring || $is_factoring_result || $is_gcf_result)
                                    echo 'Enter one number (e.g., 24) or two numbers (e.g., 12, 16)';
                                else
                                    echo 'Enter the number to convert here';
                                ?>"
-                        value="<?php echo esc_attr($number_to_convert ?: ($is_factorial ? (string) $factorial_id : ($is_factoring_result ? (string) $factor_id : ''))); ?>"
+                        value="<?php echo esc_attr($number_to_convert ?: ($is_factorial ? (string) $factorial_id : ($is_factoring_result ? (string) $factor_id : ($is_gcf_result ? $gcf_x . ', ' . $gcf_y : '')))); ?>"
                         placeholder="<?php
                         if ($is_factorial || $ntw_page === 'factorial-calculator')
                             echo 'Enter a positive integer (e.g., 5)';
-                        elseif ($is_factoring || $is_factoring_result)
+                        elseif ($is_factoring || $is_factoring_result || $is_gcf_result)
                             echo 'Enter one number (e.g., 24) or two numbers (e.g., 12, 16)';
                         else
                             echo 'Enter the number to convert here';
@@ -179,7 +203,7 @@ class HeaderBlock
                         <?php
                         if ($is_factorial || $ntw_page === 'factorial-calculator')
                             echo 'CALCULATE';
-                        elseif ($is_factoring || $is_factoring_result)
+                        elseif ($is_factoring || $is_factoring_result || $is_gcf_result)
                             echo 'FACTOR';
                         else
                             echo 'CONVERT';
@@ -207,6 +231,11 @@ class HeaderBlock
         }
         $factor_id_check = $wp_query->get('factor_id');
         if (!empty($factor_id_check) && ((int) $factor_id_check < 1 || (int) $factor_id_check > 1000000)) {
+            return;
+        }
+        $gcf_x_check = $wp_query->get('gcf_x');
+        $gcf_y_check = $wp_query->get('gcf_y');
+        if (!empty($gcf_x_check) && !empty($gcf_y_check) && ($gcf_x_check < 1 || $gcf_x_check > 100 || $gcf_y_check < 1 || $gcf_y_check > 100)) {
             return;
         }
 
@@ -248,13 +277,23 @@ class HeaderBlock
                         <?php
                     } elseif (!empty($wp_query->get('factor_id'))) {
                         $fid = $wp_query->get('factor_id');
-                        $h1s_fo = [
+                        $h1s_f = [
                             'What are the Factors of ' . $fid . '?',
                             'The Exact Factors of ' . $fid,
                             'How to Find the Factors of ' . $fid,
-                            'Factors of ' . $fid . ': Prime Factorization &amp; Pairs',
+                            'Factors of ' . $fid . ': Prime Factorization & Pairs',
                         ];
-                        echo '<h1>' . esc_html($h1s_fo[(int) $fid % 4]) . '</h1>';
+                        echo '<h1>' . esc_html($h1s_f[(int) $fid % 4]) . '</h1>';
+                    } elseif (!empty($wp_query->get('gcf_x')) && !empty($wp_query->get('gcf_y'))) {
+                        $gx = $wp_query->get('gcf_x');
+                        $gy = $wp_query->get('gcf_y');
+                        $h1s_gcf = [
+                            'What is the GCF of ' . $gx . ' and ' . $gy . '?',
+                            'Greatest Common Factor of ' . $gx . ' and ' . $gy,
+                            'How to Find the GCF of ' . $gx . ' and ' . $gy,
+                            'GCF of ' . $gx . ' and ' . $gy . ': Step-by-Step',
+                        ];
+                        echo '<h1>' . esc_html($h1s_gcf[((int) $gx + (int) $gy) % 4]) . '</h1>';
                     } elseif (is_home() || is_front_page()) {
                         ?>
                         <p style="font-size: 1.6em; font-weight: 700; line-height: 1.3; margin: 0; color: inherit;">How to write
